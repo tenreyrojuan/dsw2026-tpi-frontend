@@ -3,9 +3,11 @@ import useAuth from '../../auth/hook/useAuth';
 import PatientLogoLinks from './PatientLogoLinks';
 import Actions from './Actions';
 import BurgerMenu from './BurgerMenu';
+import { useNavigate } from 'react-router-dom';
 
 export default function PatientHeader(){
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const { singout } = useAuth();
     const handleLogout = () => {
