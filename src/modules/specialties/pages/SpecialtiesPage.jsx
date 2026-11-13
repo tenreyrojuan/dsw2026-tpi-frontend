@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import { ChevronLeft, ChevronRight, Heart, Pen, Plus, Search, Smile, Trash } from 'lucide-react';
+import LightBulb from '../../../assets/LightBulb';
+import Flask from '../../../assets/Flask';
 
 function SpecialtiesPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,19 +16,7 @@ function SpecialtiesPage() {
         'Estudio y tratamiento de trastornos del corazón y del sistema circulatorio.',
       status: 'Active',
       icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          />
-        </svg>
+        <Heart size={18}/>
       ),
     },
     {
@@ -35,19 +26,7 @@ function SpecialtiesPage() {
         'Diagnóstico y tratamiento de todas las categorías de afecciones cerebrales.',
       status: 'Active',
       icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-          />
-        </svg>
+        <LightBulb />
       ),
     },
     {
@@ -57,19 +36,7 @@ function SpecialtiesPage() {
         'Atención integral de enfermedades de la piel, uñas y cabello.',
       status: 'Inactive',
       icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-          />
-        </svg>
+        <Flask />
       ),
     },
     {
@@ -78,19 +45,7 @@ function SpecialtiesPage() {
       description: 'Cuidado médico de lactantes, niños y adolescentes.',
       status: 'Active',
       icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <Smile size={18}/>
       ),
     },
   ];
@@ -119,19 +74,7 @@ function SpecialtiesPage() {
           {/* Buscador */}
           <div className="relative min-w-[240px] flex-1 sm:flex-initial">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-med-text-muted">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+              <Search size={14} />
             </span>
             <input
               type="text"
@@ -147,7 +90,7 @@ function SpecialtiesPage() {
             onClick={() => alert('Abrir modal para crear nueva especialidad')}
             className="flex items-center gap-1.5 bg-med-primary-900 hover:bg-med-primary-800 text-white font-medium"
           >
-            <span>+</span>
+            <Plus size={16}/>
             <span>Nueva Especialidad</span>
           </Button>
         </div>
@@ -216,19 +159,7 @@ function SpecialtiesPage() {
                           alert(`Editar especialidad ${spec.name}`)
                         }
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                          />
-                        </svg>
+                        <Pen size={15}/>
                       </button>
 
                       <button
@@ -238,19 +169,7 @@ function SpecialtiesPage() {
                           alert(`Eliminar especialidad ${spec.name}`)
                         }
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
+                        <Trash size={16}/>
                       </button>
                     </div>
                   </td>
@@ -265,10 +184,10 @@ function SpecialtiesPage() {
           <span>Mostrando 4 de 32 registros</span>
           <div className="flex items-center gap-1">
             <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              ‹
+              <ChevronLeft size={12}/>
             </button>
             <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              ›
+              <ChevronRight size={12}/>
             </button>
           </div>
         </div>

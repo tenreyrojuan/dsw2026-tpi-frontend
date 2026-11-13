@@ -1,3 +1,4 @@
+import { Menu } from "lucide-react";
 
 {/* Acciones Derecha Desktop / Mobile Avatar */}
 export default function Actions({onClick}){
@@ -35,19 +36,7 @@ export default function Actions({onClick}){
             onClick={onClick}
             className="md:hidden p-1.5 rounded-lg border border-med-border text-med-text-sub hover:bg-gray-50"
             >
-            <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
-                <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-                />
-            </svg>
+            <Menu size={18} />
             </button>
         </div>        
     )

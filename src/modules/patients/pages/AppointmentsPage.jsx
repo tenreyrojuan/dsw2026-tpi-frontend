@@ -1,5 +1,6 @@
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import { Plus } from 'lucide-react';
 
 function AppointmentsPage() {
   const sampleAppointments = [
@@ -32,8 +33,11 @@ function AppointmentsPage() {
             Consulta y gestiona las citas médicas programadas.
           </p>
         </div>
-        <Button onClick={() => alert('Función de nuevo turno próximamente')}>
-          + Solicitar Nuevo Turno
+        <Button 
+        onClick={() => alert('Función de nuevo turno próximamente')}
+        className='flex items-center gap-1 hover:bg-med-primary-800'>
+          <Plus size={20}/>
+           Solicitar Nuevo Turno
         </Button>
       </div>
 

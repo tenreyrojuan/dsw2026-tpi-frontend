@@ -2,6 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import { 
+  Calendar1,
+  Check, 
+  ChevronLeft, 
+  ChevronRight, 
+  CircleCheck, 
+  Search, 
+  Triangle 
+} from 'lucide-react';
 
 function PatientHome() {
   const navigate = useNavigate();
@@ -119,7 +128,7 @@ function PatientHome() {
                 <option value="Medicina General">Medicina General</option>
               </select>
               <span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-med-text-muted">
-                ▼
+                <Triangle className='rotate-180 fill-current' size={10} /> 
               </span>
             </div>
           </div>
@@ -142,7 +151,7 @@ function PatientHome() {
                 ))}
               </select>
               <span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-med-text-muted">
-                ▼
+                <Triangle className='rotate-180 fill-current' size={10} /> 
               </span>
             </div>
           </div>
@@ -154,19 +163,7 @@ function PatientHome() {
               className="w-full flex items-center justify-center gap-2 bg-med-primary-900 hover:bg-med-primary-800 text-white font-medium py-2.5 rounded-lg shadow-sm"
               onClick={() => {}}
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+              <Search size={16} />
               <span>Buscar Disponibilidad</span>
             </Button>
           </div>
@@ -209,7 +206,7 @@ function PatientHome() {
               type="button"
               className="p-1 rounded-md border border-med-border hover:bg-gray-50 text-med-text-sub transition"
             >
-              ‹
+              <ChevronLeft size={14} />
             </button>
             <span className="font-bold text-sm sm:text-base text-med-primary-900">
               Lunes 22 - Viernes 26, Mayo
@@ -218,7 +215,7 @@ function PatientHome() {
               type="button"
               className="p-1 rounded-md border border-med-border hover:bg-gray-50 text-med-text-sub transition"
             >
-              ›
+              <ChevronRight size={14} />
             </button>
           </div>
 
@@ -398,7 +395,7 @@ function PatientHome() {
             Resumen de Selección
           </span>
           <p className="text-base sm:text-lg font-bold text-med-primary-900 mt-0.5 flex items-center gap-2">
-            <span>📅</span>
+            <Calendar1 className='text-orange-600'/>
             <span>
               {selectedDayObj.fullDate}, {selectedSlot} HS
             </span>
@@ -415,19 +412,7 @@ function PatientHome() {
           className="flex items-center justify-center gap-2 bg-med-primary-900 hover:bg-med-primary-800 text-white font-medium py-3 px-6 rounded-xl shadow-md text-sm shrink-0"
         >
           <span>Confirmar Turno</span>
-          <svg
-            className="w-5 h-5 text-emerald-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <CircleCheck className='text-green-400'/>
         </Button>
       </div>
 
@@ -436,7 +421,7 @@ function PatientHome() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 text-center animate-in fade-in zoom-in duration-150">
             <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-              ✓
+              <Check />
             </div>
             <h3 className="text-xl font-bold text-med-primary-900">
               ¡Turno Confirmado con Éxito!
