@@ -1,4 +1,10 @@
-function Input({ label, error = '', className = '', ...restProps }) {
+function Input({
+  label,
+  placeholder = '',
+  error = '',
+  className = '',
+  ...restProps
+}) {
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && (
@@ -10,6 +16,8 @@ function Input({ label, error = '', className = '', ...restProps }) {
         className={`w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white text-med-text-main placeholder-med-text-muted transition focus:outline-none focus:ring-2 focus:ring-med-primary-600 focus:border-transparent ${
           error ? 'border-red-400 bg-red-50/20' : 'border-med-border'
         } ${className}`}
+
+        placeholder={placeholder}
         {...restProps}
       />
       {error && <p className="text-xs text-red-500 font-medium">{error}</p>}

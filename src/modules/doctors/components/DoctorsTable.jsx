@@ -1,24 +1,22 @@
-import Card from '../../shared/components/Card';
 import { Eye, Pen, Trash } from 'lucide-react';
-import TablePagination from './TablePagination';
-import { useDoctors } from '../hooks/useDoctors';
-
+import Loading from '../../shared/components/Loading';
+import { useDelete } from '../hooks/useDelete';
+import TableActions from './TableActions';
 
 {/* Tabla Principal */}
-export default function DoctorsTable({filteredDoctors}){
+export default function DoctorsTable({filteredDoctors, isLoading, error}){
+
+  const {removeDoctor, isDeleting, deleteError} = useDelete();
 
   return(
-      <Card className="p-0 overflow-hidden border-med-border">
-        
-        <div className="p-5 border-b border-med-border">
-          <h2 className="text-base font-bold text-med-primary-900">
-            Registros de Doctores
-          </h2>
-        </div>
-        
-        {/* Tabla de Doctores */}
+        isLoading
+        ? 
+        <Loading />
+        :
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+
+
+           <table className="w-full text-left text-sm">
             <thead className="bg-med-primary-50/70 text-[11px] uppercase tracking-wider text-med-text-sub border-b border-med-border">
               <tr>
                 <th className="px-6 py-3.5">Nombre del Doctor</th>
@@ -30,7 +28,16 @@ export default function DoctorsTable({filteredDoctors}){
               </tr>
             </thead>
             <tbody className="divide-y divide-med-border-subtle">
-              {filteredDoctors.map((doc) => (
+              {
+              error ? 
+              <tr>
+                <td className='text-red-400'>
+                  {error}
+                </td>
+              
+              </tr> 
+
+              : filteredDoctors.map((doc) => (
                 <tr
                   key={doc.id}
                   className="hover:bg-gray-50/70 transition-colors"
@@ -64,13 +71,13 @@ export default function DoctorsTable({filteredDoctors}){
                   {/* Especialidad Badge en Píldora */}
                   <td className="px-6 py-4">
                     <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-med-primary-100 text-med-primary-700">
-                      {doc.specialty}
+                      {doc.specialty.name}
                     </span>
                   </td>
 
                   {/* Estado de Disponibilidad */}
                   <td className="px-6 py-4 text-center">
-                    {doc.statusType === 'active' ? (
+                    {doc.statusType === 'isActive' ? (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-active-bg text-med-active-text">
                         <span className="w-1.5 h-1.5 rounded-full bg-med-active-text" />
                         Active
@@ -84,43 +91,13 @@ export default function DoctorsTable({filteredDoctors}){
                   </td>
 
                   {/* Botones de Acciones (Ojo, Lápiz, Basurero) */}
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2 text-med-primary-600">
-                      <button
-                        title="Ver detalle"
-                        className="p-1.5 rounded-lg hover:bg-med-primary-50 text-med-primary-600 hover:text-med-primary-900 transition"
-                        onClick={() => alert(`Ver detalle de ${doc.name}`)}
-                      >
-                        <Eye size={16}/>
-                      </button>
-
-                      <button
-                        title="Editar profesional"
-                        className="p-1.5 rounded-lg hover:bg-med-primary-50 text-med-primary-600 hover:text-med-primary-900 transition"
-                        onClick={() => alert(`Editar profesional ${doc.name}`)}
-                      >
-                        <Pen size={15}/>
-                      </button>
-
-                      <button
-                        title="Eliminar profesional"
-                        className="p-1.5 rounded-lg hover:bg-red-50 text-med-danger-text transition"
-                        onClick={() =>
-                          alert(`Eliminar profesional ${doc.name}`)
-                        }
-                      >
-                        <Trash size={16}/>
-                      </button>
-                    </div>
-                  </td>
+                  <TableActions doctor={doc} removeDoctor={removeDoctor}/>
                 </tr>
               ))}
+                  
             </tbody>
           </table>
+              
         </div>
-
-        {/* Paginador normalizado idéntico a Búsqueda y Filtrado de Citas */}
-        <TablePagination />
-      </Card>
   );
 }
