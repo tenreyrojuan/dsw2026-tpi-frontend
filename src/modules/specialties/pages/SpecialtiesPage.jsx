@@ -5,9 +5,11 @@ import { ChevronLeft, ChevronRight, Heart, Pen, Plus, Search, Smile, Trash } fro
 import LightBulb from '../../../assets/LightBulb';
 import Flask from '../../../assets/Flask';
 import Table from '../../shared/components/Table';
+import { useNavigate } from 'react-router-dom';
 
 function SpecialtiesPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const specialtiesList = [
     {
@@ -88,10 +90,10 @@ function SpecialtiesPage() {
 
           {/* Botón Nueva Especialidad */}
           <Button
-            onClick={() => alert('Abrir modal para crear nueva especialidad')}
-            className="flex items-center gap-1.5 bg-med-primary-900 hover:bg-med-primary-800 text-white font-medium"
+            onClick={() => navigate('/admin/specialties/add')}
+            className="flex items-center gap-2 bg-med-primary-700 hover:bg-med-primary-800 text-white"
           >
-            <Plus size={16}/>
+            <Plus size={18} />
             <span>Nueva Especialidad</span>
           </Button>
         </div>
@@ -107,7 +109,7 @@ function SpecialtiesPage() {
         <Table columns={[
           { key: 'name', label: 'Nombre de la Especialidad' },
           { key: 'description', label: 'Descripción' },
-          { key: 'status', label: 'Estado' }
+          { key: 'actions', label: 'Acciones' }
         ]} data={filteredSpecialties} />
       </Card>
     </div>
