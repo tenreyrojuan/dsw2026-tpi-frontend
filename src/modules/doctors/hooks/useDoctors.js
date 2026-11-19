@@ -1,49 +1,53 @@
 import { useState } from 'react';
+import { fetchDoctors } from '../services/fetchDoctors';
+import { useEffect } from 'react';
+import { DoctorFilter } from '../helpers/doctorFilter';
+import { usePaginate } from './usePaginate';
 
 export function useDoctors() {
-const [searchTerm, setSearchTerm] = useState('');
+  const [doctors, setDoctors] = useState([]);
+  const [totalDoctors, setTotalDoctors] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const doctorsList = [
-    {
-      id: 'MED-4920',
-      name: 'Dr. Alejandro Rivera',
-      specialty: 'Cardiología Clínica',
-      status: 'Active',
-      statusType: 'active',
-      avatar: '👨‍⚕️',
-    },
-    {
-      id: 'MED-2104',
-      name: 'Dra. Elena Martínez',
-      specialty: 'Pediatría Avanzada',
-      status: 'On Leave',
-      statusType: 'danger',
-      avatar: '👩‍⚕️',
-    },
-    {
-      id: 'MED-8831',
-      name: 'Dr. Marcos Torres',
-      specialty: 'Neurocirugía',
-      status: 'Active',
-      statusType: 'active',
-      avatar: '👨‍⚕️',
-    },
-    {
-      id: 'MED-1192',
-      name: 'Dra. Lucía Soria',
-      specialty: 'Ginecología',
-      status: 'Active',
-      statusType: 'active',
-      avatar: '👩‍⚕️',
-    },
-  ];
+  const pagination = usePaginate({pageSize: 10, pageIndex: 1 , totalItems: totalDoctors});
+  
 
-  const filteredDoctors = doctorsList.filter(
-    (doc) =>
-      doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doc.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doc.id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    async function load() {
+      setIsLoading(true);
 
-  return { filteredDoctors, searchTerm, setSearchTerm };
+      try{
+        const { data, error } = await fetchDoctors({pageSize: 10, pageIndex: pagination.currentPage}); 
+        if(data === null){
+          setError("No se encontraron doctores")
+          return;
+        }
+
+        setDoctors(data.data);
+        setTotalDoctors(data.total ?? 0);
+        setError(error ?? null);
+      }
+      catch(error){
+        console.error('Se produjo un error al buscar los doctores:', error);
+      }
+      finally{
+        setIsLoading(false);
+      }
+    }
+    load(); 
+  }, [pagination.currentPage]);
+
+  const filteredDoctors = DoctorFilter({doctors, searchTerm});
+
+  return { 
+    filteredDoctors, 
+    searchTerm, 
+    setSearchTerm, 
+    isLoading, 
+    error, 
+    totalDoctors, 
+    pagination
+  };
 }
