@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import Table from '../../shared/components/Table';
 
 function OverviewPage() {
   const navigate = useNavigate();
@@ -198,73 +199,11 @@ function OverviewPage() {
           </div>
         </div>
 
-        {/* Tabla */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-med-primary-50/70 text-[11px] uppercase tracking-wider text-med-text-sub border-b border-med-border">
-              <tr>
-                <th className="px-6 py-3.5">Nombre del Doctor</th>
-                <th className="px-6 py-3.5">Especialidad</th>
-                <th className="px-6 py-3.5">Estado de Disponibilidad</th>
-                <th className="px-6 py-3.5 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-med-border-subtle text-sm">
-              {previewDoctors.map((doc) => (
-                <tr
-                  key={doc.id}
-                  className="hover:bg-gray-50/70 transition-colors"
-                >
-                  <td className="px-6 py-4 flex items-center gap-3">
-                    <span className="w-9 h-9 rounded-full bg-med-primary-100 flex items-center justify-center text-lg">
-                      {doc.avatar}
-                    </span>
-                    <span className="font-semibold text-med-primary-900">
-                      {doc.name}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-med-text-sub">
-                    {doc.specialty}
-                  </td>
-                  <td className="px-6 py-4">
-                    {doc.statusType === 'active' ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-active-bg text-med-active-text">
-                        <span className="w-1.5 h-1.5 rounded-full bg-med-active-text" />
-                        {doc.status}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-leave-bg text-med-leave-text">
-                        <span className="w-1.5 h-1.5 rounded-full bg-med-leave-text" />
-                        {doc.status}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={() => navigate('/admin/doctors')}
-                      className="text-xs font-semibold text-med-primary-700 hover:text-med-primary-900"
-                    >
-                      Ver Detalle
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Paginador inferior normalizado */}
-        <div className="p-4 bg-med-primary-50/50 border-t border-med-border flex items-center justify-between text-xs text-med-text-muted">
-          <span>Mostrando 3 de 124 registros</span>
-          <div className="flex items-center gap-1">
-            <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              ‹
-            </button>
-            <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              ›
-            </button>
-          </div>
-        </div>
+        <Table columns={[
+          { key: 'name', label: 'Nombre del Doctor' },
+          { key: 'specialty', label: 'Especialidad' }
+        ]} data={previewDoctors} />
+      
       </Card>
     </div>
   );

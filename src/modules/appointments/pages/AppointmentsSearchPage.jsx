@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import Table from '../../shared/components/Table';
 
 function AppointmentsSearchPage() {
   const [patientQuery, setPatientQuery] = useState('Johnathan Doe');
@@ -251,112 +252,29 @@ function AppointmentsSearchPage() {
           </h2>
         </div>
 
-        {/* Tabla de Citas */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-med-primary-50/70 text-[11px] uppercase tracking-wider text-med-text-sub border-b border-med-border">
-              <tr>
-                <th className="px-6 py-3.5">Fecha</th>
-                <th className="px-6 py-3.5">Departamento</th>
-                <th className="px-6 py-3.5">Paciente</th>
-                <th className="px-6 py-3.5 text-center">Estado</th>
-                <th className="px-6 py-3.5 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-med-border-subtle">
-              {appointmentsData.map((item) => (
-                <tr
-                  key={item.id}
-                  className="hover:bg-gray-50/70 transition-colors"
-                >
-                  {/* Fecha y Hora */}
-                  <td className="px-6 py-4">
-                    <p className="font-bold text-med-primary-900 text-sm">
-                      {item.date}
-                    </p>
-                    <p className="text-xs text-med-text-muted mt-0.5">
-                      {item.time}
-                    </p>
-                  </td>
-
-                  {/* Departamento / Especialidad con Icono */}
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-med-primary-100 text-med-primary-700 flex items-center justify-center shrink-0">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-med-primary-900">
-                          {item.department}
-                        </p>
-                        <p className="text-xs text-med-text-muted">
-                          {item.doctor}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Paciente y DNI */}
-                  <td className="px-6 py-4">
-                    <p className="font-semibold text-med-text-main">
-                      {item.patient}
-                    </p>
-                    <p className="text-xs text-med-text-muted mt-0.5">
-                      DNI: {item.dni}
-                    </p>
-                  </td>
-
-                  {/* Estado (CONFIRMADO, COMPLETADO, CANCELADO) */}
-                  <td className="px-6 py-4 text-center">
-                    {item.statusType === 'confirmed' && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-active-bg text-med-active-text">
-                        <span className="w-1.5 h-1.5 rounded-full bg-med-active-text" />
-                        {item.status}
-                      </span>
-                    )}
-                    {item.statusType === 'completed' && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
-                        {item.status}
-                      </span>
-                    )}
-                    {item.statusType === 'cancelled' && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-danger-bg text-med-danger-text">
-                        <span className="w-1.5 h-1.5 rounded-full bg-med-danger-text" />
-                        {item.status}
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Acciones */}
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={() =>
-                        alert(`Ver detalle de cita de ${item.patient}`)
-                      }
-                      className="text-xs font-semibold text-med-primary-700 hover:text-med-primary-900 transition hover:underline"
-                    >
-                      Ver Detalle
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Paginador inferior normalizado */}
-        <div className="p-4 bg-med-primary-50/50 border-t border-med-border flex items-center justify-between text-xs text-med-text-muted">
-          <span>Mostrando 3 de 42 registros</span>
-          <div className="flex items-center gap-1">
-            <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              ‹
-            </button>
-            <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              ›
-            </button>
-          </div>
-        </div>
+        <Table
+          columns={[
+            {
+              key: 'date',
+              label: 'Fecha',
+              render: () => (
+                <div className="flex flex-col items-center gap-2">
+                  <strong>{'24 Oct, 2023'}</strong>
+                  <span>{'10:30 AM'}</span>
+                </div>
+              ),
+            },
+            { key: 'department', label: 'Departamento',render: () => (
+                <div className="flex flex-col items-center gap-2">
+                  <strong>{'Cardiología'}</strong>
+                  <span>{'Dr. Robert Smith'}</span>
+                </div>
+              ), },
+            { key: 'patient', label: 'Paciente' },
+            { key: 'status', label: 'Estado' },
+          ]}
+          data={appointmentsData}
+        />
       </Card>
     </div>
   );
