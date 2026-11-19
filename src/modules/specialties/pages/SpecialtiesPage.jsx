@@ -1,63 +1,36 @@
-import { useState } from 'react';
 import Card from '../../shared/components/Card';
-import Button from '../../shared/components/Button';
-import { ChevronLeft, ChevronRight, Heart, Pen, Plus, Search, Smile, Trash } from 'lucide-react';
-import LightBulb from '../../../assets/LightBulb';
-import Flask from '../../../assets/Flask';
+import { Search } from 'lucide-react';
 import Table from '../../shared/components/Table';
-import { useNavigate } from 'react-router-dom';
+import TableActions from '../../shared/components/TableActions';
+import Actions from '../components/Actions';
+import { useDelete } from '../hooks/useDelete';
+import { useSpecialties } from '../hooks/useSpecialties';
 
 function SpecialtiesPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+  const {
+    filteredSpecialties,
+    reloadSpecialties,
+    searchTerm,
+    setSearchTerm,
+    isLoading,
+    error,
+  } = useSpecialties();
 
-  const specialtiesList = [
-    {
-      id: 1,
-      name: 'Cardiología',
-      description:
-        'Estudio y tratamiento de trastornos del corazón y del sistema circulatorio.',
-      status: 'Active',
-      icon: (
-        <Heart size={18}/>
-      ),
-    },
-    {
-      id: 2,
-      name: 'Neurología',
-      description:
-        'Diagnóstico y tratamiento de todas las categorías de afecciones cerebrales.',
-      status: 'Active',
-      icon: (
-        <LightBulb />
-      ),
-    },
-    {
-      id: 3,
-      name: 'Dermatología',
-      description:
-        'Atención integral de enfermedades de la piel, uñas y cabello.',
-      status: 'Inactive',
-      icon: (
-        <Flask />
-      ),
-    },
-    {
-      id: 4,
-      name: 'Pediatría',
-      description: 'Cuidado médico de lactantes, niños y adolescentes.',
-      status: 'Active',
-      icon: (
-        <Smile size={18}/>
-      ),
-    },
-  ];
+  const { removeSpecialty, deleteError } = useDelete(() => {
+    reloadSpecialties();
+  });
 
-  const filteredSpecialties = specialtiesList.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const tableData = filteredSpecialties.map((spec) => ({
+    ...spec,
+    actions: (
+      <TableActions
+        editTitle={`Editar ${spec.name}`}
+        deleteTitle={`Eliminar ${spec.name}`}
+        onEdit={() => alert(`Editar especialidad ${spec.name}`)}
+        onDelete={() => removeSpecialty(spec.id)}
+      />
+    ),
+  }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -88,29 +61,26 @@ function SpecialtiesPage() {
             />
           </div>
 
-          {/* Botón Nueva Especialidad */}
-          <Button
-            onClick={() => navigate('/admin/specialties/add')}
-            className="flex items-center gap-2 bg-med-primary-700 hover:bg-med-primary-800 text-white"
-          >
-            <Plus size={18} />
-            <span>Nueva Especialidad</span>
-          </Button>
+          {/*Nueva Especialidad */}
+          <Actions />
         </div>
       </div>
 
-      {/* Tabla Principal de Especialidades */}
+      {/* Tabla*/}
       <Card className="p-0 overflow-hidden border-med-border">
         <div className="p-5 border-b border-med-border">
           <h2 className="text-base font-bold text-med-primary-900">
             Registros de Especialidades
           </h2>
         </div>
-        <Table columns={[
-          { key: 'name', label: 'Nombre de la Especialidad' },
-          { key: 'description', label: 'Descripción' },
-          { key: 'actions', label: 'Acciones' }
-        ]} data={filteredSpecialties} />
+        <Table
+          columns={[
+            { key: 'name', label: 'Nombre de la Especialidad' },
+            { key: 'description', label: 'Descripción' },
+            { key: 'actions', label: 'Acciones' },
+          ]}
+          data={tableData}
+        />
       </Card>
     </div>
   );

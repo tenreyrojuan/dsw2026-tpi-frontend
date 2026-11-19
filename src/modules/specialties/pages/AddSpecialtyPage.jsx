@@ -1,37 +1,19 @@
 import { Save } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
-import { addSpecialty } from '../services/addSpecialty';
 import Input from '../../shared/components/Input';
+import { useAddSpecialty } from '../hooks/useAddSpecialty';
 
 export default function AddSpecialtyPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm();
-
-  const [serverError, setServerError] = useState('');
-  const navigate = useNavigate();
-
-  const onSubmit = async (data) => {
-    setServerError('');
-    try {
-      await addSpecialty({
-        name: data.name.trim(),
-        description: data.description.trim(),
-      });
-      navigate('/admin/specialties');
-    } catch (err) {
-      const apiMessage =
-        err.response?.data?.message ||
-        'Ocurrió un error al registrar la especialidad.';
-      setServerError(apiMessage);
-    }
-  };
+    errors,
+    isSubmitting,
+    serverError,
+    onSubmit,
+    navigate,
+  } = useAddSpecialty();
 
   return (
     <div className="flex flex-col gap-6">
