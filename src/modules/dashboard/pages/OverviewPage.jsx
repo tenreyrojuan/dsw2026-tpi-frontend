@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import { instance } from '../../shared/api/axiosInstance';
+import { useEffect, useState } from 'react';
 
 function OverviewPage() {
   const navigate = useNavigate();
@@ -31,6 +33,28 @@ function OverviewPage() {
       avatar: '👨‍⚕️',
     },
   ];
+
+  const [activeDoctorsCount, setActiveDoctorsCount] = useState(0);
+  useEffect(() => {
+    const fetchActiveDoctorsCount = async () => {
+      try {
+        const totalDoctorsCount = async () => {
+          const response = await instance.get('api/doctors', {
+            params: {
+              pageSize: 500,
+              pageIndex: 0,
+            },
+          });
+          return response.data.total;
+        };
+        const total = await totalDoctorsCount();
+        setActiveDoctorsCount(total);
+      } catch (error) {
+        console.error('Error fetching active doctors count:', error);
+      }
+    }; 
+    fetchActiveDoctorsCount();
+  }, []);
 
   return (
     <div className="flex flex-col gap-8">
@@ -95,7 +119,7 @@ function OverviewPage() {
               Doctores Activos
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              124
+              {activeDoctorsCount}
             </p>
           </div>
         </Card>
