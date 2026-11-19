@@ -35,16 +35,6 @@ function AuthProvider({ children }) {
   };
 
   const singinAdmin = async (username, password) => {
-    if (
-      (username === 'admin' ||
-        username === 'admin@medportal.com' ||
-        username === 'admin@test.com') &&
-      password === 'admin123'
-    ) {
-      setAuthSession('mock-admin-token-12345');
-
-      return { error: null };
-    }
 
     const { data, error } = await loginAdmin(username, password);
 
