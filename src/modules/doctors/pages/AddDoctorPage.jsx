@@ -1,8 +1,13 @@
 import Loading from '../../shared/components/Loading';
+<<<<<<< Updated upstream
 import { useDoctorForm } from '../hooks/useDoctorForm';
 import { useSpecialties } from '../hooks/useSpecialties';
 import { AddDoctorFormHeader } from '../components/AddDoctorFormHeader';
 import { AddDoctorForm } from '../components/AddDoctorForm';
+=======
+import Select from '../../shared/components/Select';
+import AddDoctorFormHeader from '../components/AddDoctorFormHeader';
+>>>>>>> Stashed changes
 
 export function AddDoctorPage() {
 
