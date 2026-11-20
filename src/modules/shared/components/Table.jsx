@@ -5,9 +5,10 @@ export default function Table({
   data = [],
   error = '',
   pagination,
+  totalItems,
 }) {
   return (
-    <div>
+    <div className='w-full overflow-x-auto'>
       <table className="w-full table-fixed text-left text-sm">
         <thead className="bg-med-primary-50/70 text-[11px] uppercase tracking-wider text-med-text-sub border-b border-med-border">
           <tr>
@@ -55,7 +56,7 @@ export default function Table({
           )}
         </tbody>
       </table>
-      {pagination && <TablePagination {...pagination} />}
-    </div>
+      {pagination && <TablePagination {...pagination} totalItems={totalItems} />}
+    </div >
   );
 }
