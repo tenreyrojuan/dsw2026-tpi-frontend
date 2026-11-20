@@ -1,47 +1,22 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
-<<<<<<< HEAD
 import { useDoctorsCount } from '../hooks/useDoctorsCount';
 import { useSpecialtiesCount } from '../hooks/useSpecialtiesCount';
 import { useBookedSlotsCount } from '../hooks/useBookedSlotsCount';
-=======
 import Table from '../../shared/components/Table';
->>>>>>> origin/development
+import Loading from '../../shared/components/Loading';
+import { useDoctorsDirectory } from '../hooks/useDoctorsDirectory';
 
 function OverviewPage() {
   const navigate = useNavigate();
 
-  const previewDoctors = [
-    {
-      id: 1,
-      name: 'Dr. James Wilson',
-      specialty: 'Cardiología',
-      status: 'Activo',
-      statusType: 'active',
-      avatar: '👨‍⚕️',
-    },
-    {
-      id: 2,
-      name: 'Dr. Elena Rodriguez',
-      specialty: 'Neurología',
-      status: 'Activo',
-      statusType: 'active',
-      avatar: '👩‍⚕️',
-    },
-    {
-      id: 3,
-      name: 'Dr. Robert Chen',
-      specialty: 'Pediatría',
-      status: 'De Licencia',
-      statusType: 'leave',
-      avatar: '👨‍⚕️',
-    },
-  ];
-
   const doctors = useDoctorsCount();
   const specialties = useSpecialtiesCount();
   const bookedSlots = useBookedSlotsCount();
+
+  const { filteredDoctors, searchTerm, setSearchTerm, isLoading, error } =
+    useDoctorsDirectory();
 
   return (
     <div className="flex flex-col gap-8">
@@ -139,7 +114,11 @@ function OverviewPage() {
               Especialidades Activas
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {specialties.isLoading ? '...' : specialties.error ? '-' : specialties.count}
+              {specialties.isLoading
+                ? '...'
+                : specialties.error
+                  ? '-'
+                  : specialties.count}
             </p>
           </div>
         </Card>
@@ -172,7 +151,11 @@ function OverviewPage() {
               Turnos Confirmados Para Hoy
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {bookedSlots.isLoading ? '...' : bookedSlots.error ? '-' : bookedSlots.count}
+              {bookedSlots.isLoading
+                ? '...'
+                : bookedSlots.error
+                  ? '-'
+                  : bookedSlots.count}
             </p>
           </div>
         </Card>
@@ -205,15 +188,55 @@ function OverviewPage() {
               type="text"
               placeholder="Buscar por nombre..."
               className="w-full pl-9 pr-3 py-1.5 text-xs bg-med-primary-50/70 border border-med-border rounded-lg text-med-text-main placeholder-med-text-muted focus:outline-none focus:ring-1 focus:ring-med-primary-600"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        <Table columns={[
-          { key: 'name', label: 'Nombre del Doctor' },
-          { key: 'specialty', label: 'Especialidad' }
-        ]} data={previewDoctors} />
-      
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Table
+            pageSize={5}
+            error={error}
+            data={filteredDoctors}
+            columns={[
+              {
+                key: 'name',
+                label: 'Nombre del Doctor',
+                render: (d) => (
+                  <>
+                    <span className="w-9 h-9 rounded-full bg-med-primary-100 flex items-center justify-center text-sm font-semibold text-med-primary-700">
+                      {d.name.charAt(0)}
+                    </span>
+                    <span className="font-semibold text-med-primary-900">
+                      {d.name}
+                    </span>
+                  </>
+                ),
+              },
+              {
+                key: 'specialty',
+                label: 'Especialidad',
+                render: (d) => d.specialty?.name,
+              },
+              {
+                key: 'actions',
+                label: 'Acciones',
+                render: () => (
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-med-primary-700 hover:text-med-primary-900"
+                    onClick={() => navigate('/admin/doctors')}
+                  >
+                    Ver Detalle
+                  </button>
+                ),
+              },
+            ]}
+          />
+        )}
       </Card>
     </div>
   );
