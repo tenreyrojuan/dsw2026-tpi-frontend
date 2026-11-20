@@ -1,0 +1,82 @@
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { addDoctorAvailability } from '../services/addDoctorAvailability';
+import { fetchDoctorAvailabilities } from '../services/fetchDoctorAvailabilities';
+import { frontendErrorMessage } from '../helpers/backendError';
+
+const WEEK_DAYS = [
+  { day: 'Monday', label: 'Lunes' },
+  { day: 'Tuesday', label: 'Martes' },
+  { day: 'Wednesday', label: 'Miércoles' },
+  { day: 'Thursday', label: 'Jueves' },
+  { day: 'Friday', label: 'Viernes' },
+  { day: 'Saturday', label: 'Sábado' },
+];
+function toFormDays(savedDays = []) {
+  return WEEK_DAYS.map(({ day, label }) => {
+    const saved = savedDays.find((item) => item.day === day);
+    return {
+      day,
+      label,
+      active: Boolean(saved),
+      startTime: saved?.startTime ?? '',
+      endTime: saved?.endTime ?? '',
+    };
+  });
+}
+
+export function useAvailabilityForm(doctorId) {
+  const form = useForm({ defaultValues: { days: toFormDays() } });
+  const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const { reset } = form;
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const response = await fetchDoctorAvailabilities(doctorId);
+      } catch (error) {
+        const issue = error?.response?.data?.Details?.[0]?.issue;
+        const errorCode = error?.response?.data?.ErrorCode;
+        if (issue) {
+          setErrorMessage(issue);
+        } else if (errorCode) {
+          setErrorMessage(frontendErrorMessage[errorCode]);
+        } else {
+          setErrorMessage('Error al conectar con el servicio administrativo');
+        }
+      }
+    } load();
+  }, [doctorId, reset]);
+
+  const onSubmit = async ({ days }) => {
+    try {
+      const response = await addDoctorAvailability(
+        {
+          doctorId,
+          days: days
+            .filter((d) => d.active)
+            .map(({ day, startTime, endTime }) => ({
+              day,
+              startTime: toTime(startTime),
+              endTime: toTime(endTime),
+            })),
+        });
+      return { data: response.data }
+      navigate(-1);
+    } catch (error) {
+      const issue = error?.response?.data?.Details?.[0]?.issue;
+      const errorCode = error?.response?.data?.ErrorCode;
+      if (issue) {
+        setErrorMessage(issue);
+      } else if (errorCode) {
+        setErrorMessage(frontendErrorMessage[errorCode]);
+      } else {
+        setErrorMessage('Error al conectar con el servicio administrativo');
+      }
+    }
+  };
+
+  return { ...form, errorMessage, onSubmit };
+}

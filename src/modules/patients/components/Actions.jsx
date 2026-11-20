@@ -1,12 +1,7 @@
 import { Menu } from "lucide-react";
 
 {/* Acciones Derecha Desktop / Mobile Avatar */}
-export default function Actions({onClick}){
-
-    const handleLogout = () => {
-    singout();
-    navigate('/login');
-    };
+export default function Actions({onClick, handleLogout}){
 
     return(
         <div className="flex items-center gap-2 sm:gap-4">

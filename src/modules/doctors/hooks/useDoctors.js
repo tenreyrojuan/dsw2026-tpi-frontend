@@ -1,54 +1,71 @@
 import { useState } from 'react';
 import { fetchDoctors } from '../services/fetchDoctors';
 import { useEffect } from 'react';
-import { DoctorFilter } from '../helpers/doctorFilter';
 import { usePaginate } from './usePaginate';
+import { frontendErrorMessage } from '../helpers/backendError'
 
-export function useDoctors() {
+export function useDoctors({ pageSize = 10 } = {}) {
   const [doctors, setDoctors] = useState([]);
   const [totalDoctors, setTotalDoctors] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const pagination = usePaginate({pageSize: 10, pageIndex: 1 , totalItems: totalDoctors});
-  
+  const pagination = usePaginate({ pageSize, pageIndex: 1, totalItems: totalDoctors });
+
+  function normalizeText(text) {
+    return text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  }
+
+  const onSearchTermChange = (e) => {
+    let searchTerm = normalizeText(e.target.value);
+    if (searchTerm.length >= 3) {
+      setSearchTerm(searchTerm);
+    }
+  }
 
   useEffect(() => {
     async function load() {
       setIsLoading(true);
 
-      try{
-        const { data, error } = await fetchDoctors({pageSize: 10, pageIndex: pagination.currentPage}); 
-        if(data === null){
+      try {
+        const { filteredDoctors, total } = await fetchDoctors({ pageSize, pageIndex: pagination.currentPage, name: searchTerm });
+        if (total === 0 || filteredDoctors.length === 0) {
           setError("No se encontraron doctores")
           return;
         }
 
-        setDoctors(data.data);
-        setTotalDoctors(data.total ?? 0);
-        setError(error ?? null);
+        setDoctors(filteredDoctors);
+        setTotalDoctors(total);
       }
-      catch(error){
-        console.error('Se produjo un error al buscar los doctores:', error);
+      catch (error) {
+        const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
+        const errorCode = error?.response?.data?.ErrorCode;
+
+        if (issueMessage) {
+          setError(issueMessage);
+        } else if (errorCode && frontendErrorMessage[errorCode]) {
+          setError(frontendErrorMessage[errorCode]);
+        } else {
+          setError('Error al conectar con el servicio administrativo');
+        }
       }
-      finally{
+      finally {
         setIsLoading(false);
       }
     }
-    load(); 
-  }, [pagination.currentPage]);
+    load();
+  }, [pagination.currentPage, searchTerm]);
 
-  const filteredDoctors = DoctorFilter({doctors, searchTerm});
-
-  return { 
-    filteredDoctors, 
+  return {
     doctors,
-    searchTerm, 
-    setSearchTerm, 
-    isLoading, 
-    error, 
-    totalDoctors, 
+    onSearchTermChange,
+    isLoading,
+    error,
+    totalDoctors,
     pagination
   };
 }

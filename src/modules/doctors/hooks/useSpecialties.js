@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchSpecialties } from "../services/fetchSpecialties";
 
-export function useSpecialties(){
+export function useSpecialties() {
   const [specialties, setSpecialties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,11 +14,20 @@ export function useSpecialties(){
 
         if (specialties.data.length === 0)
           setError('No se encontraron especialidades');
+
         setSpecialties(specialties.data);
 
-        setError(specialties.error);
       } catch (error) {
-        setError(error);
+        const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
+        const errorCode = error?.response?.data?.ErrorCode;
+
+        if (issueMessage) {
+          setError(issueMessage);
+        } else if (errorCode && frontendErrorMessage[errorCode]) {
+          setError(frontendErrorMessage[errorCode]);
+        } else {
+          setError('Error al conectar con el servicio administrativo');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -26,5 +35,5 @@ export function useSpecialties(){
     load();
   }, []);
 
-  return {isLoading, specialties, error}
+  return { isLoading, specialties, error }
 }

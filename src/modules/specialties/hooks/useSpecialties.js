@@ -1,50 +1,60 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchSpecialties } from '../services/fetchSpecialties';
+import { SpecialtyFilter } from '../helpers/specialtyFilter';
+import { usePaginate } from '../../shared/hooks/usePaginate';
 
 export function useSpecialties() {
   const [specialties, setSpecialties] = useState([]);
   const [totalSpecialties, setTotalSpecialties] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+
+  const pagination = usePaginate({pageSize: 10, pageIndex: 1, totalItems: totalSpecialties,});
 
   const loadSpecialties = useCallback(async () => {
     setIsLoading(true);
-    const result = await fetchSpecialties();
+    setError('');
 
-    if (result.error) {
-      setError(result.error);
+    try {
+      const { data, error } = await fetchSpecialties({
+        pageSize: 10,
+        pageIndex: pagination.currentPage,
+      });
+
+      if (data === null) {
+        setSpecialties([]);
+        setError('No se encontraron especialidades');
+        return;
+      }
+
+      setSpecialties(data.data ?? []);
+      setTotalSpecialties(data.total ?? 0);
+      setError(error ?? '');
+    } catch (error) {
+      console.error('Se produjo un error al buscar las especialidades:', error);
       setSpecialties([]);
-    } else {
-      const items = Array.isArray(result.data)
-        ? result.data
-        : (result.data?.data ?? []);
-      setSpecialties(items);
-      setTotalSpecialties(result.total ?? items.length);
-      setError(null);
+      setError('Error al conectar con el servicio administrativo');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }, []);
+  }, [pagination.currentPage]);
 
   useEffect(() => {
     loadSpecialties();
   }, [loadSpecialties]);
 
-  const safeList = Array.isArray(specialties) ? specialties : [];
-
-  const filteredSpecialties = safeList.filter(
-    (item) =>
-      item?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item?.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredSpecialties = SpecialtyFilter({ specialties, searchTerm });
 
   return {
     filteredSpecialties,
+    specialties,
     reloadSpecialties: loadSpecialties,
     searchTerm,
     setSearchTerm,
     isLoading,
     error,
     totalSpecialties,
+    pagination,
   };
 }

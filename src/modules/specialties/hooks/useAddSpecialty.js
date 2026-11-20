@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { addSpecialty } from '../services/addSpecialty';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { addSpecialty } from '../services/addSpecialty';
+import { frontendErrorMessage } from '../helpers/backendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function useAddSpecialty() {
   const {
@@ -10,25 +12,22 @@ export function useAddSpecialty() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const [serverError, setServerError] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
+  const goToSpecialties = () => navigate('/admin/specialties');
+
   const onSubmit = async (data) => {
-    setServerError('');
+    setErrorMessage(null);
+
     try {
       await addSpecialty({
-        name: data.name.trim(),
-        description: data.description.trim(),
+        name: data.name,
+        description: data.description,
       });
-      navigate('/admin/specialties');
+      goToSpecialties();
     } catch (error) {
-      const apiMessage =
-        error.response?.status === 409
-          ? 'Ya existe una especialidad con ese nombre.'
-          : error.response?.data?.message ||
-            'Ocurrió un error al registrar la especialidad.';
-
-      setServerError(apiMessage);
+      setErrorMessage(parseBackendError(error, frontendErrorMessage));
     }
   };
 
@@ -37,8 +36,8 @@ export function useAddSpecialty() {
     handleSubmit,
     errors,
     isSubmitting,
-    serverError,
     onSubmit,
-    navigate,
+    onCancel: goToSpecialties,
+    errorMessage,
   };
 }
