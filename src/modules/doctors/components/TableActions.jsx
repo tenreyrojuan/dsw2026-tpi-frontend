@@ -11,14 +11,13 @@ export default function TableActions({
   const navigate = useNavigate();
 
   return (
-    <td className="px-6 py-4 text-right">
-      <div className="flex items-center justify-end gap-2 text-med-primary-600">
-        <ActionButton
-          title="Ver detalle"
-          onClick={() => alert(`Ver detalle de ${doctor.name}`)}
-        >
-          <Eye size={16} />
-        </ActionButton>
+    <div className="flex items-center justify-end gap-2 w-full text-med-primary-600">
+      <ActionButton
+        title="Ver detalle"
+        onClick={() => alert(`Ver detalle de ${doctor.name}`)}
+      >
+        <Eye size={16} />
+      </ActionButton>
 
         <ActionButton
           title="Editar profesional"
