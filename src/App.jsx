@@ -26,6 +26,7 @@ import AppointmentsSearchPage from './modules/appointments/pages/AppointmentsSea
 import { AddDoctorPage } from './modules/doctors/pages/AddDoctorPage';
 import UpdateDoctorPage from './modules/doctors/pages/UpdateDoctorPage';
 import DoctorAvailabilitiesPage from './modules/doctors/pages/DoctorAvailabilitiesPage';
+import AddSpecialtyPage from './modules/specialties/pages/AddSpecialtyPage';
 
 const routes = [
   // Rutas públicas
@@ -90,6 +91,10 @@ const routes = [
       {
         path: 'specialties',
         element: <SpecialtiesPage />,
+      },
+      {
+        path: 'specialties/add',
+        element: <AddSpecialtyPage />,
       },
       {
         path: 'doctors',
