@@ -8,5 +8,5 @@ export async function fetchSpecialties() {
     },
   });
 
-  return { data: response.data.data, error: response.error };
+  return { data: response.data.data };
 }

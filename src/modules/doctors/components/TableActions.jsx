@@ -2,34 +2,38 @@ import { Eye, Pen, Trash } from 'lucide-react';
 
 export default function TableActions({ doctor, removeDoctor }) {
   return (
-    <td className="px-6 py-4 text-right">
-      <div className="flex items-center justify-end gap-2 text-med-primary-600">
-        <ActionButton
-          title="Ver detalle"
-          onClick={() => alert(`Ver detalle de ${doctor.name}`)}
-        >
-          <Eye size={16} />
-        </ActionButton>
+    <div className="flex items-center justify-end gap-2 w-full text-med-primary-600">
+      <ActionButton
+        title="Ver detalle"
+        onClick={() => alert(`Ver detalle de ${doctor.name}`)}
+      >
+        <Eye size={16} />
+      </ActionButton>
 
-        <ActionButton
-          title="Editar profesional"
-          onClick={() => alert(`Editar profesional ${doctor.name}`)}
-        >
-          <Pen size={15} />
-        </ActionButton>
+      <ActionButton
+        title="Editar profesional"
+        onClick={() => navigate('update')}
+      >
+        <Pen size={15} />
+      </ActionButton>
 
-        <ActionButton
-          title="Eliminar profesional"
-          onClick={() => {
+      <ActionButton
+        title="Eliminar profesional"
+        onClick={() => {
+          const confirmed = window.confirm(
+            `Estas seguro que deseas eliminar a ${doctor.name}`
+          );
+          if (confirmed) {
             removeDoctor(doctor.id);
-            //alert(`Eliminar profesional ${doc.name}`)
-          }}
-          color="text-red-600"
-        >
-          <Trash size={16} />
-        </ActionButton>
-      </div>
-    </td>
+            window.location.reload();
+          }
+        }}
+        color="text-red-600"
+        disabled={isDeleting}
+      >
+        <Trash size={16} />
+      </ActionButton>
+    </div>
   );
 }
 
