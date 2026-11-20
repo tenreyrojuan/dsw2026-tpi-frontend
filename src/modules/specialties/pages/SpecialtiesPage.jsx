@@ -6,7 +6,6 @@ import { useSpecialties } from '../hooks/useSpecialties';
 function SpecialtiesPage() {
   const {
     filteredSpecialties,
-    totalSpecialties,
     reloadSpecialties,
     searchTerm,
     setSearchTerm,
@@ -28,7 +27,6 @@ function SpecialtiesPage() {
 
         <SpecialtiesTable
           filteredSpecialties={filteredSpecialties}
-          totalSpecialties={totalSpecialties}
           isLoading={isLoading}
           error={error}
           pagination={pagination}

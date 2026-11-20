@@ -3,7 +3,7 @@ import Table from '../../shared/components/Table';
 import TableActions from '../../shared/components/TableActions';
 import { frontendErrorMessage } from '../helpers/backendError';
 import { deleteSpecialty } from '../services/deleteSpecialty';
-import { useDelete } from '../../shared/hooks/useDelete';
+import { useDelete } from '../hooks/useDelete';
 
 const columns = [
   { key: 'name', label: 'Nombre de la Especialidad', className: 'w-1/4' },

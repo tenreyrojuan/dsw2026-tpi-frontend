@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { parseBackendError } from '../helpers/parseBackendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function useDelete({ deleteFn, errorMessages = {} }) {
   const [isDeleting, setIsDeleting] = useState(false);
