@@ -17,6 +17,6 @@ export function usePaginate({ pageSize, pageIndex, totalItems }) {
     from,
     to,
     totalPages,
-    onPageChange,
+    onPageChange
   };
 }

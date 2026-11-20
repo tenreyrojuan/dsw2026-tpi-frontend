@@ -1,4 +1,3 @@
-import { Eye, Pen, Trash } from 'lucide-react';
 import Loading from '../../shared/components/Loading';
 import { useDelete } from '../hooks/useDelete';
 import TableActions from './TableActions';
