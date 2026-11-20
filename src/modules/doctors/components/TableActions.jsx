@@ -19,31 +19,30 @@ export default function TableActions({
         <Eye size={16} />
       </ActionButton>
 
-        <ActionButton
-          title="Editar profesional"
-          onClick={() => navigate('update')}
-        >
-          <Pen size={15} />
-        </ActionButton>
+      <ActionButton
+        title="Editar profesional"
+        onClick={() => navigate('update')}
+      >
+        <Pen size={15} />
+      </ActionButton>
 
-        <ActionButton
-          title="Eliminar profesional"
-          onClick={() => {
-            const confirmed = window.confirm(
-              `Estas seguro que deseas eliminar a ${doctor.name}`
-            );
-            if (confirmed) {
-              removeDoctor(doctor.id);
-              window.location.reload();
-            }
-          }}
-          color="text-red-600"
-          disabled={isDeleting}
-        >
-          <Trash size={16} />
-        </ActionButton>
-      </div>
-    </td>
+      <ActionButton
+        title="Eliminar profesional"
+        onClick={() => {
+          const confirmed = window.confirm(
+            `Estas seguro que deseas eliminar a ${doctor.name}`
+          );
+          if (confirmed) {
+            removeDoctor(doctor.id);
+            window.location.reload();
+          }
+        }}
+        color="text-red-600"
+        disabled={isDeleting}
+      >
+        <Trash size={16} />
+      </ActionButton>
+    </div>
   );
 }
 
