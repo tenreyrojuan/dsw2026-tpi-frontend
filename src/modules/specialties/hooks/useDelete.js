@@ -1,29 +1,27 @@
-import { deleteSpecialty } from '../services/deleteSpecialty';
 import { useState } from 'react';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
-export function useDelete(onSuccess) {
+export function useDelete({ deleteFn, errorMessages = {} }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
-  const removeSpecialty = async (specialtyId) => {
+  const remove = async (id) => {
     setIsDeleting(true);
     setDeleteError(null);
 
-    const { error } = await deleteSpecialty(specialtyId);
-
-    setIsDeleting(false);
-
-    if (error) {
-      setDeleteError(error);
+    try {
+      await deleteFn({ id });
+      return true;
+    } catch (error) {
+      setDeleteError(parseBackendError(error, errorMessages));
       return false;
+    } finally {
+      setIsDeleting(false);
     }
-
-    if (onSuccess) onSuccess(specialtyId);
-    return true;
   };
 
   return {
-    removeSpecialty,
+    remove,
     isDeleting,
     deleteError,
   };

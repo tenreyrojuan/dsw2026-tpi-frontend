@@ -1,9 +1,9 @@
 import { instance } from '../../shared/api/axiosInstance';
 
 export async function addSpecialty({ name, description }) {
-  const response = await instance.post('/api/specialties', {
+  const response = await instance.post('api/specialties', {
     name,
     description,
   });
-  return response.data;
+  return { newSpecialty: response.data };
 }
