@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
-import { instance } from '../../shared/api/axiosInstance';
-import { useEffect, useState } from 'react';
+import { useDoctorsCount } from '../hooks/useDoctorsCount';
+import { useSpecialtiesCount } from '../hooks/useSpecialtiesCount';
+import { useBookedSlotsCount } from '../hooks/useBookedSlotsCount';
 
 function OverviewPage() {
   const navigate = useNavigate();
@@ -34,27 +35,9 @@ function OverviewPage() {
     },
   ];
 
-  const [activeDoctorsCount, setActiveDoctorsCount] = useState(0);
-  useEffect(() => {
-    const fetchActiveDoctorsCount = async () => {
-      try {
-        const totalDoctorsCount = async () => {
-          const response = await instance.get('api/doctors', {
-            params: {
-              pageSize: 500,
-              pageIndex: 0,
-            },
-          });
-          return response.data.total;
-        };
-        const total = await totalDoctorsCount();
-        setActiveDoctorsCount(total);
-      } catch (error) {
-        console.error('Error fetching active doctors count:', error);
-      }
-    }; 
-    fetchActiveDoctorsCount();
-  }, []);
+  const doctors = useDoctorsCount();
+  const specialties = useSpecialtiesCount();
+  const bookedSlots = useBookedSlotsCount();
 
   return (
     <div className="flex flex-col gap-8">
@@ -119,7 +102,7 @@ function OverviewPage() {
               Doctores Activos
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {activeDoctorsCount}
+              {doctors.isLoading ? '...' : doctors.error ? '-' : doctors.count}
             </p>
           </div>
         </Card>
@@ -152,7 +135,7 @@ function OverviewPage() {
               Especialidades Activas
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              32
+              {specialties.isLoading ? '...' : specialties.error ? '-' : specialties.count}
             </p>
           </div>
         </Card>
@@ -185,7 +168,7 @@ function OverviewPage() {
               Turnos Confirmados Para Hoy
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              48
+              {bookedSlots.isLoading ? '...' : bookedSlots.error ? '-' : bookedSlots.count}
             </p>
           </div>
         </Card>
