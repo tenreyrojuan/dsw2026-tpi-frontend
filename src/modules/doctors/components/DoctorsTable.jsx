@@ -21,9 +21,6 @@ export default function DoctorsTable({filteredDoctors, isLoading, error}){
               <tr>
                 <th className="px-6 py-3.5">Nombre del Doctor</th>
                 <th className="px-6 py-3.5">Especialidad</th>
-                <th className="px-6 py-3.5 text-center">
-                  Estado de Disponibilidad
-                </th>
                 <th className="px-6 py-3.5 text-right">Acciones</th>
               </tr>
             </thead>
@@ -73,21 +70,6 @@ export default function DoctorsTable({filteredDoctors, isLoading, error}){
                     <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-med-primary-100 text-med-primary-700">
                       {doc.specialty.name}
                     </span>
-                  </td>
-
-                  {/* Estado de Disponibilidad */}
-                  <td className="px-6 py-4 text-center">
-                    {doc.statusType === 'isActive' ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-active-bg text-med-active-text">
-                        <span className="w-1.5 h-1.5 rounded-full bg-med-active-text" />
-                        Active
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-danger-bg text-med-danger-text">
-                        <span className="w-1.5 h-1.5 rounded-full bg-med-danger-text" />
-                        On Leave
-                      </span>
-                    )}
                   </td>
 
                   {/* Botones de Acciones (Ojo, Lápiz, Basurero) */}

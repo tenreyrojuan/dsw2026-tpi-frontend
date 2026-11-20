@@ -1,60 +1,36 @@
-import { useState } from 'react';
 import Card from '../../shared/components/Card';
-import Button from '../../shared/components/Button';
-import { ChevronLeft, ChevronRight, Heart, Pen, Plus, Search, Smile, Trash } from 'lucide-react';
-import LightBulb from '../../../assets/LightBulb';
-import Flask from '../../../assets/Flask';
+import { Search } from 'lucide-react';
+import Table from '../../shared/components/Table';
+import TableActions from '../../shared/components/TableActions';
+import Actions from '../components/Actions';
+import { useDelete } from '../hooks/useDelete';
+import { useSpecialties } from '../hooks/useSpecialties';
 
 function SpecialtiesPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const {
+    filteredSpecialties,
+    reloadSpecialties,
+    searchTerm,
+    setSearchTerm,
+    isLoading,
+    error,
+  } = useSpecialties();
 
-  const specialtiesList = [
-    {
-      id: 1,
-      name: 'Cardiología',
-      description:
-        'Estudio y tratamiento de trastornos del corazón y del sistema circulatorio.',
-      status: 'Active',
-      icon: (
-        <Heart size={18}/>
-      ),
-    },
-    {
-      id: 2,
-      name: 'Neurología',
-      description:
-        'Diagnóstico y tratamiento de todas las categorías de afecciones cerebrales.',
-      status: 'Active',
-      icon: (
-        <LightBulb />
-      ),
-    },
-    {
-      id: 3,
-      name: 'Dermatología',
-      description:
-        'Atención integral de enfermedades de la piel, uñas y cabello.',
-      status: 'Inactive',
-      icon: (
-        <Flask />
-      ),
-    },
-    {
-      id: 4,
-      name: 'Pediatría',
-      description: 'Cuidado médico de lactantes, niños y adolescentes.',
-      status: 'Active',
-      icon: (
-        <Smile size={18}/>
-      ),
-    },
-  ];
+  const { removeSpecialty, deleteError } = useDelete(() => {
+    reloadSpecialties();
+  });
 
-  const filteredSpecialties = specialtiesList.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const tableData = filteredSpecialties.map((spec) => ({
+    ...spec,
+    actions: (
+      <TableActions
+        editTitle={`Editar ${spec.name}`}
+        deleteTitle={`Eliminar ${spec.name}`}
+        onEdit={() => alert(`Editar especialidad ${spec.name}`)}
+        onDelete={() => removeSpecialty(spec.id)}
+      />
+    ),
+  }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -85,112 +61,26 @@ function SpecialtiesPage() {
             />
           </div>
 
-          {/* Botón Nueva Especialidad */}
-          <Button
-            onClick={() => alert('Abrir modal para crear nueva especialidad')}
-            className="flex items-center gap-1.5 bg-med-primary-900 hover:bg-med-primary-800 text-white font-medium"
-          >
-            <Plus size={16}/>
-            <span>Nueva Especialidad</span>
-          </Button>
+          {/*Nueva Especialidad */}
+          <Actions />
         </div>
       </div>
 
-      {/* Tabla Principal de Especialidades */}
+      {/* Tabla*/}
       <Card className="p-0 overflow-hidden border-med-border">
         <div className="p-5 border-b border-med-border">
           <h2 className="text-base font-bold text-med-primary-900">
             Registros de Especialidades
           </h2>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-med-primary-50/70 text-[11px] uppercase tracking-wider text-med-text-sub border-b border-med-border">
-              <tr>
-                <th className="px-6 py-3.5">Nombre de la Especialidad</th>
-                <th className="px-6 py-3.5">Descripción</th>
-                <th className="px-6 py-3.5 text-center">Estado</th>
-                <th className="px-6 py-3.5 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-med-border-subtle">
-              {filteredSpecialties.map((spec) => (
-                <tr
-                  key={spec.id}
-                  className="hover:bg-gray-50/70 transition-colors"
-                >
-                  {/* Nombre con icono en caja celeste */}
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-med-primary-100 text-med-primary-700 flex items-center justify-center shrink-0">
-                        {spec.icon}
-                      </div>
-                      <span className="font-semibold text-med-primary-900">
-                        {spec.name}
-                      </span>
-                    </div>
-                  </td>
-
-                  {/* Descripción */}
-                  <td className="px-6 py-4 text-med-text-sub max-w-md">
-                    {spec.description}
-                  </td>
-
-                  {/* Estado (Active / Inactive) */}
-                  <td className="px-6 py-4 text-center">
-                    {spec.status === 'Active' ? (
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-med-active-bg text-med-active-text">
-                        Active
-                      </span>
-                    ) : (
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">
-                        Inactive
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Acciones: Editar y Eliminar */}
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2 text-med-text-muted">
-                      <button
-                        title="Editar especialidad"
-                        className="p-1.5 rounded-lg hover:bg-med-primary-50 text-med-text-muted hover:text-med-primary-900 transition"
-                        onClick={() =>
-                          alert(`Editar especialidad ${spec.name}`)
-                        }
-                      >
-                        <Pen size={15}/>
-                      </button>
-
-                      <button
-                        title="Eliminar especialidad"
-                        className="p-1.5 rounded-lg hover:bg-red-50 text-med-text-muted hover:text-med-danger-text transition"
-                        onClick={() =>
-                          alert(`Eliminar especialidad ${spec.name}`)
-                        }
-                      >
-                        <Trash size={16}/>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Paginador normalizado idéntico a Búsqueda y Filtrado de Citas */}
-        <div className="p-4 bg-med-primary-50/50 border-t border-med-border flex items-center justify-between text-xs text-med-text-muted">
-          <span>Mostrando 4 de 32 registros</span>
-          <div className="flex items-center gap-1">
-            <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              <ChevronLeft size={12}/>
-            </button>
-            <button className="px-2.5 py-1 border border-med-border rounded bg-white text-med-text-sub hover:bg-gray-50">
-              <ChevronRight size={12}/>
-            </button>
-          </div>
-        </div>
+        <Table
+          columns={[
+            { key: 'name', label: 'Nombre de la Especialidad' },
+            { key: 'description', label: 'Descripción' },
+            { key: 'actions', label: 'Acciones' },
+          ]}
+          data={tableData}
+        />
       </Card>
     </div>
   );

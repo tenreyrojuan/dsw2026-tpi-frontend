@@ -24,6 +24,9 @@ import DoctorsPage from './modules/doctors/pages/DoctorsPage';
 import SpecialtiesPage from './modules/specialties/pages/SpecialtiesPage';
 import AppointmentsSearchPage from './modules/appointments/pages/AppointmentsSearchPage';
 import { AddDoctorPage } from './modules/doctors/pages/AddDoctorPage';
+import UpdateDoctorPage from './modules/doctors/pages/UpdateDoctorPage';
+import DoctorAvailabilitiesPage from './modules/doctors/pages/DoctorAvailabilitiesPage';
+import AddSpecialtyPage from './modules/specialties/pages/AddSpecialtyPage';
 
 const routes = [
   // Rutas públicas
@@ -90,13 +93,26 @@ const routes = [
         element: <SpecialtiesPage />,
       },
       {
+        path: 'specialties/add',
+        element: <AddSpecialtyPage />,
+      },
+      {
         path: 'doctors',
         element: <DoctorsPage />,
       },
       {
         path: 'doctors/add',
         element: <AddDoctorPage />,
-      }
+      },
+
+      {
+        path: 'doctors/availabilities',
+        element: <DoctorAvailabilitiesPage />,
+      },
+      {
+        path: 'doctors/update',
+        element: <UpdateDoctorPage />,
+      },
     ],
   },
 

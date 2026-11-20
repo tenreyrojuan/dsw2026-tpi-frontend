@@ -34,7 +34,7 @@ function AdminLoginPage() {
       if (error?.response?.data?.ErrorCode) {
         setErrorMessage(frontendErrorMessage[error?.response?.data?.ErrorCode]);
       } else {
-        setErrorMessage('Error al conectar con el servicio administr1000ativo');
+        setErrorMessage('Error al conectar con el servicio administrativo');
       }
     }
   };

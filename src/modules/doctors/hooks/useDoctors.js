@@ -43,6 +43,7 @@ export function useDoctors() {
 
   return { 
     filteredDoctors, 
+    doctors,
     searchTerm, 
     setSearchTerm, 
     isLoading, 
