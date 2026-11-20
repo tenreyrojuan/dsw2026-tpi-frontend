@@ -31,8 +31,8 @@ function AdminLoginPage() {
 
       navigate('/admin/home');
     } catch (error) {
-      if (error?.response?.data?.code) {
-        setErrorMessage(frontendErrorMessage[error?.response?.data?.code]);
+      if (error?.response?.data?.ErrorCode) {
+        setErrorMessage(frontendErrorMessage[error?.response?.data?.ErrorCode]);
       } else {
         setErrorMessage('Error al conectar con el servicio administrativo');
       }

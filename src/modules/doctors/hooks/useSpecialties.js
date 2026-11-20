@@ -6,7 +6,7 @@ export function useSpecialties() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+    useEffect(() => {
     async function load() {
       setIsLoading(true);
       try {

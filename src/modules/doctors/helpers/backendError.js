@@ -1,5 +1,6 @@
 const frontendErrorMessage = {
-  CONFLICT_LICENSE: 'Recurso Duplicado',
+  CONFLICT_LICENSE: '',
 };
 
 export { frontendErrorMessage };
+

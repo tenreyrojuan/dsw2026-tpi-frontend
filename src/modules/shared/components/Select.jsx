@@ -1,9 +1,10 @@
 export default function Select({
   label,
   data = [],
-  optionName,
+  optionName = '',
   placeholder = '',
   error = '',
+  children,
   ...restProps
 }) {
   return (
@@ -23,11 +24,13 @@ export default function Select({
             {placeholder}
           </option>
         )}
-        {data.map((d) => (
-          <option key={d.id} value={d.id}>
-            {d[optionName]}
-          </option>
-        ))}
+        {children
+          ? children
+          : data.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d[optionName]}
+              </option>
+            ))}
       </select>
       {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
     </div>

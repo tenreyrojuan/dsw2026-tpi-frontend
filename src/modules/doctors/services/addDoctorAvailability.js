@@ -1,10 +1,13 @@
-import { instance } from '../../shared/api/axiosInstance';
 
-export async function addDoctorAvailability({ doctorId, days }) {
-  const response = await instance.post('api/availabilities', {
+
+export async function addDoctorAvailability({doctorId, day, startTime, endTime}) {
+  const response = await instance.post('/api/availabilities', {
     doctorId,
-    days,
+    days : {
+      day,
+      startTime,
+      endTime
+    }
   });
-
-  return { data: response.data };
+  return { response: response };
 }

@@ -9,7 +9,7 @@ export default function Actions() {
   return (
     <div className="flex flex-wrap items-center gap-1">
       <Button
-        onClick={() => alert('Abrir modal de disponibilidad horaria')}
+        onClick={() => navigate('availabilities')}
         className="flex items-center gap-2 bg-med-primary-900 hover:bg-med-primary-800 text-white"
       >
         <Clock4Icon size={18} />
@@ -17,7 +17,7 @@ export default function Actions() {
       </Button>
 
       <Button
-        onClick={() => navigate('/admin/doctors/add')}
+        onClick={() => navigate('add')}
         className="flex items-center gap-1.5 bg-med-primary-700 hover:bg-med-primary-800 text-white"
       >
         <Plus size={18} />
