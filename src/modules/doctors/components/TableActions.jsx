@@ -1,6 +1,15 @@
 import { Eye, Pen, Trash } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-export default function TableActions({ doctor, removeDoctor }) {
+export default function TableActions({
+  doctor,
+  removeDoctor,
+  isDeleting,
+  deleteError,
+}) {
+
+  const navigate = useNavigate();
+
   return (
     <td className="px-6 py-4 text-right">
       <div className="flex items-center justify-end gap-2 text-med-primary-600">
@@ -13,7 +22,7 @@ export default function TableActions({ doctor, removeDoctor }) {
 
         <ActionButton
           title="Editar profesional"
-          onClick={() => alert(`Editar profesional ${doctor.name}`)}
+          onClick={() => navigate('update')}
         >
           <Pen size={15} />
         </ActionButton>
@@ -21,10 +30,16 @@ export default function TableActions({ doctor, removeDoctor }) {
         <ActionButton
           title="Eliminar profesional"
           onClick={() => {
-            removeDoctor(doctor.id);
-            //alert(`Eliminar profesional ${doc.name}`)
+            const confirmed = window.confirm(
+              `Estas seguro que deseas eliminar a ${doctor.name}`
+            );
+            if (confirmed) {
+              removeDoctor(doctor.id);
+              window.location.reload();
+            }
           }}
           color="text-red-600"
+          disabled={isDeleting}
         >
           <Trash size={16} />
         </ActionButton>
@@ -37,6 +52,7 @@ function ActionButton({
   title,
   onClick,
   children,
+  disabled = '',
   color = 'text-med-primary-600',
 }) {
   return (
@@ -44,6 +60,7 @@ function ActionButton({
       title={title}
       className={`p-1.5 rounded-lg hover:bg-med-primary-50 ${color} hover:text-med-primary-900 transition`}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>

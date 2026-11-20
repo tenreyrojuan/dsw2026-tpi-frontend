@@ -6,5 +6,5 @@ export async function AddDoctor({ name, licenseNumber, specialtyId }) {
     licenseNumber,
     specialtyId,
   });
-  return { newDoctor: response.data, error: response.error };
+  return { newDoctor: response.data };
 }
