@@ -1,40 +1,21 @@
-import { useState, useEffect } from 'react';
 import TablePagination from './TablePagination';
 
 export default function Table({
   columns,
   data = [],
-  pageSize = 10,
   error = '',
+  pagination,
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [data.length]);
-
-  const totalItems = data.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const paginatedData = data.slice(startIndex, startIndex + pageSize);
-
-  const from = totalItems > 0 ? startIndex + 1 : 0;
-  const to = Math.min(startIndex + pageSize, totalItems);
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
-
   return (
     <div>
-      <table className="w-full text-left text-sm">
+      <table className="w-full table-fixed text-left text-sm">
         <thead className="bg-med-primary-50/70 text-[11px] uppercase tracking-wider text-med-text-sub border-b border-med-border">
           <tr>
             {columns.map((column) => (
-              <th key={column.key} className="px-6 py-3.5">
+              <th
+                key={column.key}
+                className={`px-6 py-3.5 ${column.className || ''}`}
+              >
                 {column.label}
               </th>
             ))}
@@ -47,7 +28,7 @@ export default function Table({
                 {error}
               </td>
             </tr>
-          ) : paginatedData.length === 0 ? (
+          ) : data.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
@@ -57,7 +38,7 @@ export default function Table({
               </td>
             </tr>
           ) : (
-            paginatedData.map((d, index) => (
+            data.map((d, index) => (
               <tr
                 key={d.id ?? index}
                 className="hover:bg-gray-50/70 transition-colors"
@@ -74,15 +55,7 @@ export default function Table({
           )}
         </tbody>
       </table>
-
-      <TablePagination
-        from={from}
-        to={to}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalItems={totalItems}
-        onPageChange={handlePageChange}
-      />
+      {pagination && <TablePagination {...pagination} />}
     </div>
   );
 }
