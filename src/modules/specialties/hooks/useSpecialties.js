@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchSpecialties } from '../services/fetchSpecialties';
-import { SpecialtyFilter } from '../helpers/specialtyFilter';
 import { usePaginate } from '../../shared/hooks/usePaginate';
 
 export function useSpecialties() {
@@ -12,6 +11,8 @@ export function useSpecialties() {
 
   const pagination = usePaginate({pageSize: 10, pageIndex: 1, totalItems: totalSpecialties,});
 
+  const name = searchTerm.length >= 3 ? searchTerm : null;
+
   const loadSpecialties = useCallback(async () => {
     setIsLoading(true);
     setError('');
@@ -20,6 +21,7 @@ export function useSpecialties() {
       const { data, error } = await fetchSpecialties({
         pageSize: 10,
         pageIndex: pagination.currentPage,
+        name,
       });
 
       if (data === null) {
@@ -37,16 +39,14 @@ export function useSpecialties() {
     } finally {
       setIsLoading(false);
     }
-  }, [pagination.currentPage]);
+  }, [pagination.currentPage, name]);
 
   useEffect(() => {
     loadSpecialties();
   }, [loadSpecialties]);
 
-  const filteredSpecialties = SpecialtyFilter({ specialties, searchTerm });
-
   return {
-    filteredSpecialties,
+    filteredSpecialties: specialties,
     specialties,
     reloadSpecialties: loadSpecialties,
     searchTerm,
