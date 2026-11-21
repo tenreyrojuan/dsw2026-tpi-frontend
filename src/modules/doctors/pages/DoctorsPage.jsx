@@ -5,9 +5,12 @@ import Card from '../../shared/components/Card';
 import ErrorMessage from '../../shared/components/ErrorMessage';
 import TableHeader from '../components/TableHeader';
 import { useDelete } from '../hooks/useDelete';
-import TableActions from '../components/TableActions';
+import TableActions from '../../shared/components/TableActions';
+import { useNavigate } from 'react-router-dom';
 
 function DoctorsPage() {
+  const navigate = useNavigate();
+
   const {
     doctors,
     totalDoctors,
@@ -19,6 +22,14 @@ function DoctorsPage() {
   } = useDoctors();
 
   const { removeDoctor, deleteError } = useDelete();
+
+  const handleDelete = async (doctor) => {
+    const confirmed = window.confirm(
+      `Estas seguro que deseas eliminar a ${doctor.name}`
+    );
+
+    if (confirmed && (await removeDoctor(doctor.id))) reload();
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,9 +52,11 @@ function DoctorsPage() {
           totalItems={totalDoctors}
           renderActions={(doc) => (
             <TableActions
-              doctor={doc}
-              removeDoctor={removeDoctor}
-              onDeleted={reload}
+              onView={() => alert(`Ver detalle de ${doc.name}`)}
+              onEdit={() => navigate('update')}
+              onDelete={() => handleDelete(doc)}
+              editTitle="Editar profesional"
+              deleteTitle="Eliminar profesional"
             />
           )}
         />
