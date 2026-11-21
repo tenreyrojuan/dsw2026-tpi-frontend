@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import { Header } from '../../shared/components/Header';
+import CardHeader from '../../shared/components/CardHeader';
+import Searchbar from '../../shared/components/Searchbar';
+import StatCard from '../components/StatCard';
 import { useStats } from '../hooks/useStats';
 import { useDoctors } from '../../doctors/hooks/useDoctors';
 import DoctorsTable from '../../doctors/components/DoctorsTable';
-import {
-  Stethoscope,
-  LayoutGrid,
-  CalendarCheck,
-  Plus,
-  Search,
-} from 'lucide-react';
+import { Stethoscope, LayoutGrid, CalendarCheck, Plus } from 'lucide-react';
 
 function OverviewPage() {
   const navigate = useNavigate();
@@ -26,18 +24,16 @@ function OverviewPage() {
     totalDoctors,
   } = useDoctors({ pageSize: 5 });
 
+  const statValue = (value) =>
+    isLoadingStats ? '...' : statsError ? '-' : value;
+
   return (
     <div className="flex flex-col gap-8">
-      {/* Header con Título y Acciones Principales */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-med-text-main">
-            Vista General de Gestión
-          </h1>
-          <p className="text-sm text-med-text-sub mt-1">
-            Configure el personal médico y las especialidades del departamento.
-          </p>
-        </div>
+        <Header
+          title="Vista General de Gestión"
+          subtitle="Configure el personal médico y las especialidades del departamento."
+        />
 
         <div className="flex flex-wrap items-center gap-3">
           <Button
@@ -59,90 +55,33 @@ function OverviewPage() {
         </div>
       </div>
 
-      {/* Tarjetas de Métricas de la Imagen 2 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Doctores Activos */}
-        <Card className="flex flex-col justify-between p-6">
-          <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-med-primary-50 text-med-primary-900 flex items-center justify-center">
-              <Stethoscope className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-med-text-sub">
-              Doctores Activos
-            </span>
-            <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {isLoadingStats ? '...' : statsError ? '-' : stats.activeDoctors}
-            </p>
-          </div>
-        </Card>
-
-        {/* Especialidades Activas */}
-        <Card className="flex flex-col justify-between p-6">
-          <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-med-primary-50 text-med-primary-900 flex items-center justify-center">
-              <LayoutGrid className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-med-text-sub">
-              Especialidades Activas
-            </span>
-            <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {isLoadingStats
-                ? '...'
-                : statsError
-                  ? '-'
-                  : stats.activeSpecialties}
-            </p>
-          </div>
-        </Card>
-
-        {/* Turnos Confirmados para Hoy */}
-        <Card className="flex flex-col justify-between p-6">
-          <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-med-primary-50 text-med-primary-900 flex items-center justify-center">
-              <CalendarCheck className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-med-text-sub">
-              Turnos Confirmados Para Hoy
-            </span>
-            <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {isLoadingStats
-                ? '...'
-                : statsError
-                  ? '-'
-                  : stats.bookedAppointmentsToday}
-            </p>
-          </div>
-        </Card>
+        <StatCard
+          icon={Stethoscope}
+          label="Doctores Activos"
+          value={statValue(stats.activeDoctors)}
+        />
+        <StatCard
+          icon={LayoutGrid}
+          label="Especialidades Activas"
+          value={statValue(stats.activeSpecialties)}
+        />
+        <StatCard
+          icon={CalendarCheck}
+          label="Turnos Confirmados Para Hoy"
+          value={statValue(stats.bookedAppointmentsToday)}
+        />
       </div>
 
       {/* Directorio de Profesionales Médicos (Tabla Resumen) */}
       <Card className="p-0 overflow-hidden border-med-border">
-        {/* Cabecera de la tabla con Buscador */}
-        <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-med-border">
-          <h2 className="text-base font-bold text-med-primary-900">
-            Directorio de Profesionales Médicos
-          </h2>
-          <div className="relative w-full sm:w-72">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-med-text-muted">
-              <Search className="w-4 h-4" />
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar por nombre..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-med-primary-50/70 border border-med-border rounded-lg text-med-text-main placeholder-med-text-muted focus:outline-none focus:ring-1 focus:ring-med-primary-600"
-              onChange={onSearchTermChange}
-            />
-          </div>
-        </div>
+        <CardHeader title="Directorio de Profesionales Médicos">
+          <Searchbar
+            placeholder="Buscar por nombre..."
+            className="w-full sm:w-72"
+            onChange={onSearchTermChange}
+          />
+        </CardHeader>
 
         <DoctorsTable
           doctors={doctors}
