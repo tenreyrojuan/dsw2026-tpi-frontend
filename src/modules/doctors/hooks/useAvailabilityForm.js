@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { addDoctorAvailability } from '../services/addDoctorAvailability';
 import { fetchDoctorAvailabilities } from '../services/fetchDoctorAvailabilities';
 import { frontendErrorMessage } from '../helpers/backendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 const WEEK_DAYS = [
   { day: 'LUNES', label: 'Lunes' },
@@ -42,15 +43,7 @@ export function useAvailabilityForm(doctorId) {
         const response = await fetchDoctorAvailabilities(doctorId);
         reset({ days: toFormDays(response.data) });
       } catch (error) {
-        const issue = error?.response?.data?.Details?.[0]?.Issue;
-        const errorCode = error?.response?.data?.ErrorCode;
-        if (issue) {
-          setErrorMessage(issue);
-        } else if (errorCode && frontendErrorMessage[errorCode]) {
-          setErrorMessage(frontendErrorMessage[errorCode]);
-        } else {
-          setErrorMessage('Error al conectar con el servicio administrativo');
-        }
+        setErrorMessage(parseBackendError(error, frontendErrorMessage));
       }
     } load();
   }, [doctorId, reset]);
@@ -70,15 +63,7 @@ export function useAvailabilityForm(doctorId) {
         });
       navigate(-1);
     } catch (error) {
-      const issue = error?.response?.data?.Details?.[0]?.Issue;
-      const errorCode = error?.response?.data?.ErrorCode;
-      if (issue) {
-        setErrorMessage(issue);
-      } else if (errorCode && frontendErrorMessage[errorCode]) {
-        setErrorMessage(frontendErrorMessage[errorCode]);
-      } else {
-        setErrorMessage('Error al conectar con el servicio administrativo');
-      }
+      setErrorMessage(parseBackendError(error, frontendErrorMessage));
     }
   };
 
