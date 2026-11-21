@@ -11,6 +11,7 @@ function SpecialtiesPage() {
     setSearchTerm,
     isLoading,
     error,
+    totalSpecialties,
     pagination,
   } = useSpecialties();
 
@@ -30,6 +31,7 @@ function SpecialtiesPage() {
           isLoading={isLoading}
           error={error}
           pagination={pagination}
+          totalItems={totalSpecialties}
           onDeleted={reloadSpecialties}
         />
       </Card>

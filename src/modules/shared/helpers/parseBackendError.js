@@ -3,8 +3,10 @@ export function parseBackendError(
   errorMessages = {},
   fallbackMessage = 'Error al conectar con el servicio administrativo'
 ) {
-  const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
-  const errorCode = error?.response?.data?.ErrorCode;
+  const data = error?.response?.data;
+  const details = data?.Details ?? data?.details;
+  const issueMessage = details?.[0]?.Issue ?? details?.[0]?.issue;
+  const errorCode = data?.ErrorCode ?? data?.errorCode;
 
   if (issueMessage) return issueMessage;
   if (errorCode && errorMessages[errorCode]) return errorMessages[errorCode];
