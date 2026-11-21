@@ -1,4 +1,3 @@
-import { useDoctors } from "../hooks/useDoctors";
 import { Search } from "lucide-react";
 {/* Barra de Búsqueda */ }
 export default function Searchbar({ onSearchTermChange }) {

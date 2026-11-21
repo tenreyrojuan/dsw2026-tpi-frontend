@@ -8,7 +8,7 @@ export function usePaginate({ pageSize, pageIndex, totalItems }) {
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
   const onPageChange = (page) => {
-    setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+    setCurrentPage(page);
   };
 
   return {
@@ -16,7 +16,6 @@ export function usePaginate({ pageSize, pageIndex, totalItems }) {
     from,
     to,
     totalPages,
-    totalItems,
-    onPageChange,
+    onPageChange
   };
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { fetchDoctors } from '../services/fetchDoctors';
 import { useEffect } from 'react';
-import { usePaginate } from './usePaginate';
+import { usePaginate } from '../../shared/hooks/usePaginate';
 import { frontendErrorMessage } from '../helpers/backendError'
 
 export function useDoctors({ pageSize = 10 } = {}) {
@@ -22,7 +22,7 @@ export function useDoctors({ pageSize = 10 } = {}) {
 
   const onSearchTermChange = (e) => {
     let searchTerm = normalizeText(e.target.value);
-    if (searchTerm.length >= 3) {
+    if (searchTerm.length >= 3 || searchTerm.length === 0) {
       setSearchTerm(searchTerm);
     }
   }
@@ -30,11 +30,14 @@ export function useDoctors({ pageSize = 10 } = {}) {
   useEffect(() => {
     async function load() {
       setIsLoading(true);
+      setError('');
 
       try {
         const { filteredDoctors, total } = await fetchDoctors({ pageSize, pageIndex: pagination.currentPage, name: searchTerm });
         if (total === 0 || filteredDoctors.length === 0) {
-          setError("No se encontraron doctores")
+          setDoctors([]);
+          setTotalDoctors(0);
+          setError('No se encontraron doctores');
           return;
         }
 
