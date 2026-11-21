@@ -27,9 +27,9 @@ function AuthProvider({ children }) {
   const setAuthSession = (token, username = '', role = '') => {
     localStorage.setItem('token', token);
     localStorage.setItem('username', username);
-    localStorage.setItem('role', role);
+    localStorage.setItem('role', role.toUpperCase());
     setUsername(username);
-    setRole(role);
+    setRole(role.toUpperCase());
     setIsAuthenticated(true);
   };
 

@@ -46,7 +46,7 @@ export function useAvailabilityForm(doctorId) {
         const errorCode = error?.response?.data?.ErrorCode;
         if (issue) {
           setErrorMessage(issue);
-        } else if (errorCode) {
+        } else if (errorCode && frontendErrorMessage[errorCode]) {
           setErrorMessage(frontendErrorMessage[errorCode]);
         } else {
           setErrorMessage('Error al conectar con el servicio administrativo');
@@ -74,7 +74,7 @@ export function useAvailabilityForm(doctorId) {
       const errorCode = error?.response?.data?.ErrorCode;
       if (issue) {
         setErrorMessage(issue);
-      } else if (errorCode) {
+      } else if (errorCode && frontendErrorMessage[errorCode]) {
         setErrorMessage(frontendErrorMessage[errorCode]);
       } else {
         setErrorMessage('Error al conectar con el servicio administrativo');

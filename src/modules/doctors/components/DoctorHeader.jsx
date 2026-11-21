@@ -1,7 +1,6 @@
 import Actions from "./Actions";
 import Searchbar from "./Searchbar";
 
-{/* Título y Acciones de Cabecera */ }
 export default function DoctorHeader({ onSearchTermChange }) {
   return (
     <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">

@@ -1,4 +1,3 @@
-import Card from '../../shared/components/Card';
 import Input from '../../shared/components/Input';
 import Table from '../../shared/components/Table';
 import Switch from '../../shared/components/Switch';

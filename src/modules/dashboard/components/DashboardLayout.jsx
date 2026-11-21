@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import useAuth from '../../auth/hook/useAuth';
-import { GalleryThumbnails, GalleryVertical, GalleryVerticalEnd, LayoutGrid, LogOut, Menu, SquarePlus, User } from 'lucide-react';
+import { GalleryVerticalEnd, LayoutGrid, LogOut, Menu, SquarePlus, User } from 'lucide-react';
 
 function DashboardLayout() {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -88,6 +88,7 @@ function DashboardLayout() {
         {/* Footer Sidebar (Help, Logout & User profile) */}
         <footer className="p-4 border-t border-med-border-subtle space-y-3">
           <button
+            type="button"
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2 text-xs font-medium text-med-text-sub hover:text-red-600 hover:bg-red-50 rounded-lg transition"
           >
@@ -133,6 +134,7 @@ function DashboardLayout() {
             </span>
           </div>
           <button
+            type="button"
             onClick={() => setOpenMobileMenu(!openMobileMenu)}
             className="p-1.5 rounded-lg border border-med-border text-med-text-sub"
           >

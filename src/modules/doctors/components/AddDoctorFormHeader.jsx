@@ -1,4 +1,4 @@
-import { UserPlus, User } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 
 
 export function AddDoctorFormHeader() {

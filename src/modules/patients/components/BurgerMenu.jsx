@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 
-{/* Desplegable móvil */}
 export default function BurgerMenu({ handleOnClick, handleLogout, username, role }) {
 
     return(
@@ -38,6 +37,7 @@ export default function BurgerMenu({ handleOnClick, handleLogout, username, role
                 {username} · {role}
             </span>
             <button
+            type="button"
             onClick={handleLogout}
             className="text-xs font-bold text-red-600"
             >

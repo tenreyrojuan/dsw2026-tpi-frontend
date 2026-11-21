@@ -16,7 +16,7 @@ export function useDoctorForm() {
 
   const onSubmit = async (data) => {
     try {
-      const { newDoctor, error } = await AddDoctor({
+      await AddDoctor({
         name: data.name,
         licenseNumber: data.licenseNumber,
         specialtyId: data.specialtyId,

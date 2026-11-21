@@ -1,5 +1,4 @@
 import { Search } from "lucide-react";
-{/* Barra de Búsqueda */ }
 export default function Searchbar({ onSearchTermChange }) {
 
     return (
@@ -10,7 +9,7 @@ export default function Searchbar({ onSearchTermChange }) {
             <input
                 type="text"
                 placeholder="Buscar doctor por nombre..."
-                onChange={(e) => onSearchTermChange(e)}
+                onChange={onSearchTermChange}
                 className="w-full pl-9 pr-3 py-2 text-xs bg-white border border-med-border rounded-lg text-med-text-main placeholder-med-text-muted focus:outline-none focus:ring-1 focus:ring-med-primary-600"
             />
         </div>

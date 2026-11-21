@@ -15,7 +15,7 @@ export function AddSpecialtyFormHeader({ onNavigateBack }) {
       </nav>
 
       <div>
-        <h1 className="text-l sm:text-2l font-bold tracking-tight text-med-primary-900">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-med-primary-900">
           Registrar Nueva Especialidad
         </h1>
         <p className="text-sm text-med-text-sub mt-1">

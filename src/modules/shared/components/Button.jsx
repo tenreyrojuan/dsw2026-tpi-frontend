@@ -5,10 +5,6 @@ function Button({
   className = '',
   ...restProps
 }) {
-  if (!['button', 'reset', 'submit'].includes(type)) {
-    console.warn('type prop not supported');
-  }
-
   const variantStyle = {
     default:
       'bg-med-primary-900 hover:bg-med-primary-800 text-white font-medium px-4 py-2 rounded-lg shadow-sm transition',

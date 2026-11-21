@@ -32,7 +32,6 @@ export function useSpecialties() {
       setTotalSpecialties(data.total ?? 0);
       setError(error ?? '');
     } catch (error) {
-      console.error('Se produjo un error al buscar las especialidades:', error);
       setSpecialties([]);
       setError('Error al conectar con el servicio administrativo');
     } finally {

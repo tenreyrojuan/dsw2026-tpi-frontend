@@ -1,4 +1,4 @@
-import { Clock4Icon, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Button from '../../shared/components/Button';
 import { useNavigate } from 'react-router-dom';
 

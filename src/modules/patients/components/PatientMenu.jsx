@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom"
 import { BriefcaseMedical } from 'lucide-react';
 
-// 
 export default function PatientMenu(){
     return(
     <NavLink to="/" className="flex items-center gap-2.5">
