@@ -1,4 +1,5 @@
 import TablePagination from './TablePagination';
+import ErrorMessage from './ErrorMessage';
 
 export default function Table({
   columns,
@@ -25,8 +26,8 @@ export default function Table({
         <tbody className="divide-y divide-med-border-subtle">
           {error ? (
             <tr>
-              <td colSpan={columns.length} className="px-6 py-4 text-red-400">
-                {error}
+              <td colSpan={columns.length} className="px-6 py-4">
+                <ErrorMessage message={error} />
               </td>
             </tr>
           ) : data.length === 0 ? (

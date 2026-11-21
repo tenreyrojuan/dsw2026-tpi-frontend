@@ -1,3 +1,5 @@
+import ErrorMessage from './ErrorMessage';
+
 export default function Select({
   label,
   data = [],
@@ -32,7 +34,7 @@ export default function Select({
               </option>
             ))}
       </select>
-      {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+      <ErrorMessage message={error} variant="field" />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import ErrorMessage from './ErrorMessage';
+
 function Input({
   label,
   placeholder = '',
@@ -20,7 +22,7 @@ function Input({
         placeholder={placeholder}
         {...restProps}
       />
-      {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+      <ErrorMessage message={error} variant="field" />
     </div>
   );
 }
