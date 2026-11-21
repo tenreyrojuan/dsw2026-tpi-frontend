@@ -1,6 +1,7 @@
 import Card from '../../shared/components/Card';
 import Input from '../../shared/components/Input';
 import Table from '../../shared/components/Table';
+import Switch from '../../shared/components/Switch';
 import FormButtons from '../../shared/components/FormButtons';
 import { useAvailabilityForm } from '../hooks/useAvailabilityForm';
 import { Clock4 } from 'lucide-react';
@@ -10,6 +11,7 @@ export default function AvailabilityForm({ doctorId }) {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
     errorMessage,
     onSubmit,
@@ -48,10 +50,11 @@ export default function AvailabilityForm({ doctorId }) {
               key: 'active',
               label: 'Estado',
               render: ({ index, active }) => (
-                <label className="flex gap-2">
-                  <input type="checkbox" {...register(`days.${index}.active`)} />
-                  {active ? 'Activo' : 'Inactivo'}
-                </label>
+                <Switch
+                  checked={active}
+                  onChange={(value) => setValue(`days.${index}.active`, value)}
+                  label={active ? 'Activo' : 'Inactivo'}
+                />
               ),
             },
             {

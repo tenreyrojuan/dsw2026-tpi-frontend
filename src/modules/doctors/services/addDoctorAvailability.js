@@ -1,13 +1,14 @@
+import { instance } from '../../shared/api/axiosInstance';
+import { fetchDoctorAvailabilities } from './fetchDoctorAvailabilities';
 
+export async function addDoctorAvailability({ doctorId, days }) {
+  const { data: current } = await fetchDoctorAvailabilities(doctorId);
+  const method = current.length > 0 ? 'put' : 'post';
 
-export async function addDoctorAvailability({doctorId, day, startTime, endTime}) {
-  const response = await instance.post('/api/availabilities', {
+  const response = await instance[method]('api/availabilities', {
     doctorId,
-    days : {
-      day,
-      startTime,
-      endTime
-    }
+    days,
   });
-  return { response: response };
+
+  return { data: response.data };
 }

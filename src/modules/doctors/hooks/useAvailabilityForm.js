@@ -6,13 +6,17 @@ import { fetchDoctorAvailabilities } from '../services/fetchDoctorAvailabilities
 import { frontendErrorMessage } from '../helpers/backendError';
 
 const WEEK_DAYS = [
-  { day: 'Monday', label: 'Lunes' },
-  { day: 'Tuesday', label: 'Martes' },
-  { day: 'Wednesday', label: 'Miércoles' },
-  { day: 'Thursday', label: 'Jueves' },
-  { day: 'Friday', label: 'Viernes' },
-  { day: 'Saturday', label: 'Sábado' },
+  { day: 'LUNES', label: 'Lunes' },
+  { day: 'MARTES', label: 'Martes' },
+  { day: 'MIÉRCOLES', label: 'Miércoles' },
+  { day: 'JUEVES', label: 'Jueves' },
+  { day: 'VIERNES', label: 'Viernes' },
+  { day: 'SÁBADO', label: 'Sábado' },
 ];
+
+// "HH:mm" -> "HH:mm:ss"
+const toTime = (time) => `${time.slice(0, 5)}:00`;
+
 function toFormDays(savedDays = []) {
   return WEEK_DAYS.map(({ day, label }) => {
     const saved = savedDays.find((item) => item.day === day);
@@ -36,8 +40,9 @@ export function useAvailabilityForm(doctorId) {
     async function load() {
       try {
         const response = await fetchDoctorAvailabilities(doctorId);
+        reset({ days: toFormDays(response.data) });
       } catch (error) {
-        const issue = error?.response?.data?.Details?.[0]?.issue;
+        const issue = error?.response?.data?.Details?.[0]?.Issue;
         const errorCode = error?.response?.data?.ErrorCode;
         if (issue) {
           setErrorMessage(issue);
@@ -52,7 +57,7 @@ export function useAvailabilityForm(doctorId) {
 
   const onSubmit = async ({ days }) => {
     try {
-      const response = await addDoctorAvailability(
+      await addDoctorAvailability(
         {
           doctorId,
           days: days
@@ -63,10 +68,9 @@ export function useAvailabilityForm(doctorId) {
               endTime: toTime(endTime),
             })),
         });
-      return { data: response.data }
       navigate(-1);
     } catch (error) {
-      const issue = error?.response?.data?.Details?.[0]?.issue;
+      const issue = error?.response?.data?.Details?.[0]?.Issue;
       const errorCode = error?.response?.data?.ErrorCode;
       if (issue) {
         setErrorMessage(issue);
