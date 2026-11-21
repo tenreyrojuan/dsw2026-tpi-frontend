@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { fetchSpecialties } from "../services/fetchSpecialties";
+import { useState, useEffect } from 'react';
+import { fetchSpecialties } from '../services/fetchSpecialties';
+import { frontendErrorMessage } from '../helpers/backendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function useSpecialties() {
   const [specialties, setSpecialties] = useState([]);
@@ -7,33 +9,25 @@ export function useSpecialties() {
   const [error, setError] = useState(null);
 
     useEffect(() => {
-    async function load() {
-      setIsLoading(true);
-      try {
-        const specialties = await fetchSpecialties();
+      async function load() {
+        setIsLoading(true);
 
-        if (specialties.data.length === 0)
-          setError('No se encontraron especialidades');
+        try {
+          const { data } = await fetchSpecialties();
 
-        setSpecialties(specialties.data);
+            setSpecialties(data);
 
-      } catch (error) {
-        const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
-        const errorCode = error?.response?.data?.ErrorCode;
-
-        if (issueMessage) {
-          setError(issueMessage);
-        } else if (errorCode && frontendErrorMessage[errorCode]) {
-          setError(frontendErrorMessage[errorCode]);
-        } else {
-          setError('Error al conectar con el servicio administrativo');
+          if (data.length === 0) {
+            setError('No se encontraron especialidades');
+          }
+        } catch (error) {
+          setError(parseBackendError(error, frontendErrorMessage));
+        } finally {
+          setIsLoading(false);
         }
-      } finally {
-        setIsLoading(false);
       }
-    }
-    load();
-  }, []);
+      load();
+    }, []);
 
-  return { isLoading, specialties, error }
-}
+    return { isLoading, specialties, error };
+  }
