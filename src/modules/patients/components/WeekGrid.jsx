@@ -2,7 +2,7 @@ import SlotButton from './SlotButton';
 
 function WeekGrid({ days, slotsByDate, selectedSlotId, onSelect }) {
   return (
-    <div className="hidden sm:grid sm:grid-cols-5 gap-3 pt-5">
+    <div className="hidden sm:grid sm:grid-cols-6 gap-3 pt-5">
       {days.map((day) => {
         const slots = slotsByDate[day.isoDate] ?? [];
 

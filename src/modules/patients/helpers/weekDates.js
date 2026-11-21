@@ -34,15 +34,15 @@ export function addDays(date, amount) {
   return result;
 }
 
-// Lunes de la semana actual (si es fin de semana, el lunes siguiente)
+// Lunes de la semana actual (si es domingo, el lunes siguiente)
 export function getMonday(today = new Date()) {
   const date = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const day = date.getDay();
-  return addDays(date, day === 0 ? 1 : day === 6 ? 2 : 1 - day);
+  return addDays(date, day === 0 ? 1 : 1 - day);
 }
 
 export function getWeekDays(monday) {
-  return Array.from({ length: 5 }, (_, i) => {
+  return Array.from({ length: 6 }, (_, i) => {
     const date = addDays(monday, i);
     return {
       isoDate: toIsoDate(date),
