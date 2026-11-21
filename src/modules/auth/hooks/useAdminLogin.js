@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hook/useAuth';
 import { frontendErrorMessage } from '../helpers/backendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function useAdminLogin() {
   const {
@@ -20,16 +21,7 @@ export function useAdminLogin() {
       await singinAdmin(data.username, data.password);
       navigate('/admin/home');
     } catch (error) {
-      const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
-      const errorCode = error?.response?.data?.ErrorCode;
-
-      if (issueMessage) {
-        setErrorMessage(issueMessage);
-      } else if (errorCode && frontendErrorMessage[errorCode]) {
-        setErrorMessage(frontendErrorMessage[errorCode]);
-      } else {
-        setErrorMessage('Error al conectar con el servicio administrativo');
-      }
+      setErrorMessage(parseBackendError(error, frontendErrorMessage));
     }
   };
 
