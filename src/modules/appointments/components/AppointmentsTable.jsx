@@ -3,17 +3,31 @@ import Loading from '../../shared/components/Loading';
 import Table from '../../shared/components/Table';
 
 const STATUS_STYLES = {
-  CONFIRMADO: 'bg-med-active-bg text-med-active-text',
-  COMPLETADO: 'bg-med-primary-100 text-med-primary-700',
-  CANCELADO: 'bg-med-danger-bg text-med-danger-text',
+  BOOKED: {
+    label: 'CONFIRMADO',
+    style: 'bg-med-active-bg text-med-active-text',
+  },
+  ATTENDED: {
+    label: 'COMPLETADO',
+    style: 'bg-med-primary-100 text-med-primary-700',
+  },
+  CANCELLED: {
+    label: 'CANCELADO',
+    style: 'bg-med-danger-bg text-med-danger-text',
+  },
+  NO_SHOW: {
+    label: 'AUSENTE',
+    style: 'bg-med-leave-bg text-med-leave-text',
+  },
 };
 
 function StatusBadge({ status }) {
-  const style = STATUS_STYLES[status] ?? 'bg-gray-100 text-med-text-sub';
+  const { label = status, style = 'bg-gray-100 text-med-text-sub' } =
+    STATUS_STYLES[status] ?? {};
 
   return (
     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${style}`}>
-      {status}
+      {label}
     </span>
   );
 }
