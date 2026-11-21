@@ -31,7 +31,7 @@ export function useSpecialties() {
       setSpecialties(data.data ?? []);
       setTotalSpecialties(data.total ?? 0);
       setError(error ?? '');
-    } catch (error) {
+    } catch {
       setSpecialties([]);
       setError('Error al conectar con el servicio administrativo');
     } finally {
