@@ -14,9 +14,10 @@ function DoctorsPage() {
     isLoading,
     error,
     pagination,
+    reload,
   } = useDoctors();
 
-  const { removeDoctor } = useDelete();
+  const { removeDoctor, deleteError } = useDelete();
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,6 +26,12 @@ function DoctorsPage() {
       <Card className="p-0 overflow-hidden border-med-border">
         <TableHeader />
 
+        {deleteError && (
+          <div className="m-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
+            {deleteError}
+          </div>
+        )}
+
         <DoctorsTable
           doctors={doctors}
           isLoading={isLoading}
@@ -32,7 +39,11 @@ function DoctorsPage() {
           pagination={pagination}
           totalItems={totalDoctors}
           renderActions={(doc) => (
-            <TableActions doctor={doc} removeDoctor={removeDoctor} />
+            <TableActions
+              doctor={doc}
+              removeDoctor={removeDoctor}
+              onDeleted={reload}
+            />
           )}
         />
       </Card>

@@ -1,14 +1,18 @@
 import { DeleteDoctor } from '../services/deleteDoctor';
 import { useState } from 'react';
+import { frontendErrorMessage } from '../helpers/backendError';
 
 export function useDelete() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
   const removeDoctor = async (doctorId) => {
+    setIsDeleting(true);
+    setDeleteError(null);
+
     try {
-      const response = await DeleteDoctor({ id: doctorId });
-      return response;
+      await DeleteDoctor({ id: doctorId });
+      return true;
     } catch (error) {
       const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
       const errorCode = error?.response?.data?.ErrorCode;
@@ -20,7 +24,7 @@ export function useDelete() {
         setDeleteError('Error al conectar con el servicio administrativo');
       }
     } finally {
-      setIsLoading(false);
+      setIsDeleting(false);
     }
   };
 

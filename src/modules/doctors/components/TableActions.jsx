@@ -6,6 +6,7 @@ export default function TableActions({
   removeDoctor,
   isDeleting,
   deleteError,
+  onDeleted,
 }) {
 
   const navigate = useNavigate();
@@ -28,13 +29,13 @@ export default function TableActions({
 
       <ActionButton
         title="Eliminar profesional"
-        onClick={() => {
+        onClick={async () => {
           const confirmed = window.confirm(
             `Estas seguro que deseas eliminar a ${doctor.name}`
           );
           if (confirmed) {
-            removeDoctor(doctor.id);
-            window.location.reload();
+            const deleted = await removeDoctor(doctor.id);
+            if (deleted) onDeleted();
           }
         }}
         color="text-red-600"

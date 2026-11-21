@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { fetchDoctors } from '../services/fetchDoctors';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePaginate } from '../../shared/hooks/usePaginate';
 import { frontendErrorMessage } from '../helpers/backendError'
 
@@ -27,44 +27,46 @@ export function useDoctors({ pageSize = 10 } = {}) {
     }
   }
 
-  useEffect(() => {
-    async function load() {
-      setIsLoading(true);
-      setError('');
+  const load = useCallback(async () => {
+    setIsLoading(true);
+    setError('');
 
-      try {
-        const { filteredDoctors, total } = await fetchDoctors({ pageSize, pageIndex: pagination.currentPage, name: searchTerm });
-        if (total === 0 || filteredDoctors.length === 0) {
-          setDoctors([]);
-          setTotalDoctors(0);
-          setError('No se encontraron doctores');
-          return;
-        }
-
-        setDoctors(filteredDoctors);
-        setTotalDoctors(total);
+    try {
+      const { filteredDoctors, total } = await fetchDoctors({ pageSize, pageIndex: pagination.currentPage, name: searchTerm });
+      if (total === 0 || filteredDoctors.length === 0) {
+        setDoctors([]);
+        setTotalDoctors(0);
+        setError('No se encontraron doctores');
+        return;
       }
-      catch (error) {
-        const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
-        const errorCode = error?.response?.data?.ErrorCode;
 
-        if (issueMessage) {
-          setError(issueMessage);
-        } else if (errorCode && frontendErrorMessage[errorCode]) {
-          setError(frontendErrorMessage[errorCode]);
-        } else {
-          setError('Error al conectar con el servicio administrativo');
-        }
-      }
-      finally {
-        setIsLoading(false);
+      setDoctors(filteredDoctors);
+      setTotalDoctors(total);
+    }
+    catch (error) {
+      const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
+      const errorCode = error?.response?.data?.ErrorCode;
+
+      if (issueMessage) {
+        setError(issueMessage);
+      } else if (errorCode && frontendErrorMessage[errorCode]) {
+        setError(frontendErrorMessage[errorCode]);
+      } else {
+        setError('Error al conectar con el servicio administrativo');
       }
     }
+    finally {
+      setIsLoading(false);
+    }
+  }, [pageSize, pagination.currentPage, searchTerm]);
+
+  useEffect(() => {
     load();
-  }, [pagination.currentPage, searchTerm]);
+  }, [load]);
 
   return {
     doctors,
+    reload: load,
     onSearchTermChange,
     isLoading,
     error,
