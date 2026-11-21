@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { fetchDoctorsCount } from '../services/fetchDoctorsCount';
+import { fetchStats } from '../services/fetchStats';
 
-export function useDoctorsCount() {
-  const [count, setCount] = useState(0);
+export function useStats() {
+  const [stats, setStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     async function load() {
       try {
-        setCount(await fetchDoctorsCount());
+        setStats(await fetchStats());
       } catch {
-        setError('No se pudo obtener la cantidad de doctores');
+        setError('No se pudieron cargar las estadísticas');
       } finally {
         setIsLoading(false);
       }
@@ -19,5 +19,5 @@ export function useDoctorsCount() {
     load();
   }, []);
 
-  return { count, isLoading, error };
+  return { stats, isLoading, error };
 }

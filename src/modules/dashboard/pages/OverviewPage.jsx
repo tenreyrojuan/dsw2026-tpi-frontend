@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
-import { useDoctorsCount } from '../hooks/useDoctorsCount';
-import { useSpecialtiesCount } from '../hooks/useSpecialtiesCount';
-import { useBookedSlotsCount } from '../hooks/useBookedSlotsCount';
+import { useStats } from '../hooks/useStats';
 import Table from '../../shared/components/Table';
 import Loading from '../../shared/components/Loading';
 import { useDoctorsDirectory } from '../hooks/useDoctorsDirectory';
@@ -12,9 +10,7 @@ import { Stethoscope, LayoutGrid, CalendarCheck, Search } from 'lucide-react';
 function OverviewPage() {
   const navigate = useNavigate();
 
-  const doctors = useDoctorsCount();
-  const specialties = useSpecialtiesCount();
-  const bookedSlots = useBookedSlotsCount();
+const { stats, isLoading: isLoadingStats, error: statsError } = useStats();
 
   const { filteredDoctors, searchTerm, setSearchTerm, isLoading, error, pagination, totalDoctors } =
     useDoctorsDirectory();
@@ -70,7 +66,7 @@ function OverviewPage() {
               Doctores Activos
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {doctors.isLoading ? '...' : doctors.error ? '-' : doctors.count}
+              {isLoadingStats ? '...' : statsError ? '-' : stats.activeDoctors}
             </p>
           </div>
         </Card>
@@ -91,11 +87,7 @@ function OverviewPage() {
               Especialidades Activas
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {specialties.isLoading
-                ? '...'
-                : specialties.error
-                  ? '-'
-                  : specialties.count}
+              {isLoadingStats ? '...' : statsError ? '-' : stats.activeSpecialties}
             </p>
           </div>
         </Card>
@@ -116,11 +108,7 @@ function OverviewPage() {
               Turnos Confirmados Para Hoy
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {bookedSlots.isLoading
-                ? '...'
-                : bookedSlots.error
-                  ? '-'
-                  : bookedSlots.count}
+              {isLoadingStats ? '...' : statsError ? '-' : stats.bookedAppointmentsToday}
             </p>
           </div>
         </Card>
