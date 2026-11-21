@@ -16,23 +16,25 @@ export default function SpecialtiesTable({
   isLoading,
   error,
   pagination,
+  totalItems,
   onDeleted,
 }) {
-  
-const { remove: removeSpecialty, isDeleting, deleteError } = useDelete({
+  const { remove: removeSpecialty, isDeleting, deleteError } = useDelete({
     deleteFn: deleteSpecialty,
     errorMessages: frontendErrorMessage,
-    onSuccess: onDeleted,
   });
 
   const handleDelete = async (spec) => {
-    if(isDeleting) return;
+    if (isDeleting) return;
+
     const confirmed = window.confirm(
       `¿Seguro que querés eliminar la especialidad "${spec.name}"?`
     );
+
     if (confirmed) {
       const ok = await removeSpecialty(spec.id);
-      if(ok && onDeleted) onDeleted();
+
+      if (ok && onDeleted) onDeleted();
     }
   };
 
@@ -63,6 +65,7 @@ const { remove: removeSpecialty, isDeleting, deleteError } = useDelete({
         data={tableData}
         error={error}
         pagination={pagination}
+        totalItems={totalItems}
       />
     </>
   );
