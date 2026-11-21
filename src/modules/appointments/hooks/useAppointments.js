@@ -42,7 +42,11 @@ export function useAppointments() {
   }, [filters, currentPage]);
 
   const applyFilters = (newFilters) => {
-    setFilters(newFilters);
+    setFilters(
+      Object.fromEntries(
+        Object.entries(newFilters).filter(([, value]) => value)
+      )
+    );
     onPageChange(1);
   };
 
@@ -50,7 +54,7 @@ export function useAppointments() {
     appointments,
     isLoading,
     error,
-    pagination,
+    pagination: { ...pagination, totalItems },
     applyFilters,
   };
 }

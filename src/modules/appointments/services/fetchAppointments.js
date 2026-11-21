@@ -3,5 +3,13 @@ import { instance } from '../../shared/api/axiosInstance';
 export async function fetchAppointments(params) {
   const response = await instance.get('api/appointments/search', { params });
 
-  return { data: response.data.data, total: response.data.total };
+  const data = response.data.data.map((appointment) => ({
+    id: appointment.appointmentsId,
+    status: appointment.appointmentsStatus,
+    patient: appointment.patient.fullName,
+    doctor: appointment.doctor.name,
+    department: appointment.doctor.specialty.name,
+  }));
+
+  return { data, total: response.data.total };
 }
