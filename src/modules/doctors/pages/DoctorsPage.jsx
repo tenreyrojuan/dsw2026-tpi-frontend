@@ -3,7 +3,7 @@ import { useDoctors } from '../hooks/useDoctors';
 import DoctorsTable from '../components/DoctorsTable';
 import Card from '../../shared/components/Card';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import TableHeader from '../components/TableHeader';
+import CardHeader from '../../shared/components/CardHeader';
 import { useDelete } from '../hooks/useDelete';
 import TableActions from '../../shared/components/TableActions';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,7 @@ function DoctorsPage() {
       <DoctorHeader onSearchTermChange={onSearchTermChange} />
 
       <Card className="p-0 overflow-hidden border-med-border">
-        <TableHeader />
+        <CardHeader title="Registros de Doctores" />
 
         {deleteError && (
           <div className="m-4">
