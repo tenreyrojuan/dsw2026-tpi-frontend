@@ -23,6 +23,16 @@ instance.interceptors.response.use(
     return config;
   },
   (error) => {
+    if (
+      error.response?.status === 401 &&
+      !error.config?.url?.includes('api/auth/')
+    ) {
+      const role = localStorage.getItem('role');
+
+      localStorage.clear();
+      window.location.assign(role === 'PACIENTE' ? '/login' : '/admin/login');
+    }
+
     return Promise.reject(error);
   }
 );
