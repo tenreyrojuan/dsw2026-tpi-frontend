@@ -59,17 +59,17 @@ function OverviewPage() {
         <StatCard
           icon={Stethoscope}
           label="Doctores Activos"
-          value={statValue(stats.activeDoctors)}
+          value={statValue(stats?.activeDoctors)}
         />
         <StatCard
           icon={LayoutGrid}
           label="Especialidades Activas"
-          value={statValue(stats.activeSpecialties)}
+          value={statValue(stats?.activeSpecialties)}
         />
         <StatCard
           icon={CalendarCheck}
           label="Turnos Confirmados Para Hoy"
-          value={statValue(stats.bookedAppointmentsToday)}
+          value={statValue(stats?.bookedAppointmentsToday)}
         />
       </div>
 
