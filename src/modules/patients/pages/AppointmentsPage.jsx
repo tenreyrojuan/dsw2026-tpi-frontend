@@ -1,26 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
+import Loading from '../../shared/components/Loading';
+import { usePatientAppointments } from '../hooks/usePatientAppointments';
 import { Plus } from 'lucide-react';
 
 function AppointmentsPage() {
-  const sampleAppointments = [
-    {
-      id: 1,
-      doctor: 'Dra. María González',
-      specialty: 'Cardiología',
-      date: '2026-10-28',
-      time: '10:30 hs',
-      status: 'Confirmado',
-    },
-    {
-      id: 2,
-      doctor: 'Dr. Lucas Fernández',
-      specialty: 'Traumatología',
-      date: '2026-11-05',
-      time: '15:00 hs',
-      status: 'Pendiente',
-    },
-  ];
+  const navigate = useNavigate();
+  const { appointments, isLoading, error, cancel } = usePatientAppointments();
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,15 +21,23 @@ function AppointmentsPage() {
           </p>
         </div>
         <Button 
-        onClick={() => alert('Función de nuevo turno próximamente')}
+        onClick={() => navigate('/')}
         className='flex items-center gap-1 hover:bg-med-primary-800'>
           <Plus size={20}/>
            Solicitar Nuevo Turno
         </Button>
       </div>
 
+      {isLoading && <Loading />}
+      {!isLoading && error && (
+        <p className="text-sm text-red-500 font-medium">{error}</p>
+      )}
+      {!isLoading && !error && appointments.length === 0 && (
+        <p className="text-sm text-med-text-sub">No tenés turnos programados.</p>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {sampleAppointments.map((appt) => (
+        {!isLoading && appointments.map((appt) => (
           <Card
             key={appt.id}
             className="flex flex-col justify-between gap-4 p-6"
@@ -50,21 +45,15 @@ function AppointmentsPage() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-med-primary-100 text-med-primary-700">
-                  {appt.specialty}
+                  {appt.specialtyName}
                 </span>
-                <span
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
-                    appt.status === 'Confirmado'
-                      ? 'bg-med-active-bg text-med-active-text'
-                      : 'bg-med-leave-bg text-med-leave-text'
-                  }`}
-                >
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-med-active-bg text-med-active-text">
                   <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                  {appt.status}
+                  Confirmado
                 </span>
               </div>
               <h3 className="text-lg font-bold text-med-primary-900">
-                {appt.doctor}
+                {appt.doctorName}
               </h3>
               <p className="text-sm text-med-text-sub mt-2">
                 Fecha:{' '}
@@ -73,7 +62,7 @@ function AppointmentsPage() {
                 </strong>{' '}
                 a las{' '}
                 <strong className="text-med-text-main font-semibold">
-                  {appt.time}
+                  {String(appt.startingTime).slice(0, 5)} hs
                 </strong>
               </p>
             </div>
@@ -81,7 +70,7 @@ function AppointmentsPage() {
               <Button
                 variant="outline"
                 className="w-full text-xs"
-                onClick={() => alert(`Cancelando turno ${appt.id}`)}
+                onClick={() => cancel(appt.id)}
               >
                 Cancelar Turno
               </Button>
