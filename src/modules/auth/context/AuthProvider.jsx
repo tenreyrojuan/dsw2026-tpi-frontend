@@ -1,5 +1,4 @@
 import { createContext, useState } from 'react';
-import { login } from '../services/login';
 import { loginAdmin } from '../services/adminLogin';
 import { loginPatient } from '../services/patientLogin';
 import { savePatientDni } from '../helpers/patientSession';
@@ -34,18 +33,6 @@ function AuthProvider({ children }) {
     setIsAuthenticated(true);
   };
 
-  const singin = async (username, password) => {
-    const { data, error } = await login(username, password);
-
-    if (error) {
-      return { error };
-    }
-
-    setAuthSession(data, username);
-
-    return { error: null };
-  };
-
   const singinAdmin = async (username, password) => {
 
     const { data, role, error } = await loginAdmin(username, password);
@@ -78,7 +65,6 @@ function AuthProvider({ children }) {
         isAuthenticated,
         username,
         role,
-        singin,
         singinAdmin,
         singinPatient,
         singout,
