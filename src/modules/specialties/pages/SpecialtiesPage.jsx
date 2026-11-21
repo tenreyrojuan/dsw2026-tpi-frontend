@@ -1,4 +1,5 @@
 import Card from '../../shared/components/Card';
+import CardHeader from '../../shared/components/CardHeader';
 import SpecialtyHeader from '../components/SpecialtyHeader';
 import SpecialtiesTable from '../components/SpecialtiesTable';
 import { useSpecialties } from '../hooks/useSpecialties';
@@ -38,11 +39,7 @@ function SpecialtiesPage() {
       <SpecialtyHeader searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <Card className="p-0 overflow-hidden border-med-border">
-        <div className="p-5 border-b border-med-border">
-          <h2 className="text-base font-bold text-med-primary-900">
-            Registros de Especialidades
-          </h2>
-        </div>
+        <CardHeader title="Registros de Especialidades" />
 
         <SpecialtiesTable
           filteredSpecialties={filteredSpecialties}
