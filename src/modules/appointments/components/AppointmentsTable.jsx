@@ -1,4 +1,6 @@
 import Card from '../../shared/components/Card';
+import Badge from '../../shared/components/Badge';
+import CardHeader from '../../shared/components/CardHeader';
 import Loading from '../../shared/components/Loading';
 import Table from '../../shared/components/Table';
 
@@ -25,11 +27,7 @@ function StatusBadge({ status }) {
   const { label = status, style = 'bg-gray-100 text-med-text-sub' } =
     STATUS_STYLES[status] ?? {};
 
-  return (
-    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${style}`}>
-      {label}
-    </span>
-  );
+  return <Badge className={style}>{label}</Badge>;
 }
 
 const columns = [
@@ -69,9 +67,7 @@ export function AppointmentsTable({
 }) {
   return (
     <Card className="p-0 overflow-hidden">
-      <h2 className="p-5 text-base font-bold text-med-primary-900 border-b border-med-border">
-        Registros de Citas
-      </h2>
+      <CardHeader title="Registros de Citas" />
       {isLoading ? (
         <Loading />
       ) : (
