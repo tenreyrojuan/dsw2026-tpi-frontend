@@ -2,6 +2,7 @@ import { createContext, useState } from 'react';
 import { login } from '../services/login';
 import { loginAdmin } from '../services/adminLogin';
 import { loginPatient } from '../services/patientLogin';
+import { savePatientDni } from '../helpers/patientSession';
 
 const AuthContext = createContext();
 
@@ -58,25 +59,15 @@ function AuthProvider({ children }) {
     return { error: null };
   };
 
-  const singinPatient = async (username, password) => {
-    if (
-      (username === 'paciente' ||
-        username === 'paciente@medportal.com' ||
-        username === 'paciente@test.com') &&
-      password === 'paciente123'
-    ) {
-      setAuthSession('mock-patient-token-67890', username, 'PACIENTE');
-
-      return { error: null };
-    }
-
-    const { data, role, error } = await loginPatient(username, password);
+  const singinPatient = async (username, dni) => {
+    const { data, role, error } = await loginPatient(username, dni);
 
     if (error) {
       return { error };
     }
 
     setAuthSession(data, username, role);
+    savePatientDni(dni);
 
     return { error: null };
   };
