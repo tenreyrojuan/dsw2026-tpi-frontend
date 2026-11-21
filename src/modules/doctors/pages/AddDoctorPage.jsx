@@ -1,4 +1,5 @@
 import Loading from '../../shared/components/Loading';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import { useDoctorForm } from '../hooks/useDoctorForm';
 import { useSpecialties } from '../hooks/useSpecialties';
 import { AddDoctorFormHeader } from '../components/AddDoctorFormHeader';
@@ -16,7 +17,7 @@ export function AddDoctorPage() {
   } = useDoctorForm();
 
 
-  const { isLoading, specialties } = useSpecialties();
+  const { isLoading, specialties, error } = useSpecialties();
 
   return (
     <div className="flex flex-col gap-6 text-blue-900">
@@ -27,6 +28,11 @@ export function AddDoctorPage() {
       <div className="rounded-lg border border-gray-300 overflow-hidden">
         <AddDoctorFormHeader />
 
+        {error && (
+          <div className="m-4">
+            <ErrorMessage message={error} />
+          </div>
+        )}
 
         {isLoading ? (
           <Loading />

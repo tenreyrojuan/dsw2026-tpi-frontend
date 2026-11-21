@@ -1,6 +1,7 @@
 import Input from '../../shared/components/Input';
 import Table from '../../shared/components/Table';
 import Switch from '../../shared/components/Switch';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import FormButtons from '../../shared/components/FormButtons';
 import { useAvailabilityForm } from '../hooks/useAvailabilityForm';
 import { Clock4 } from 'lucide-react';
@@ -40,7 +41,9 @@ export default function AvailabilityForm({ doctorId }) {
           </div>
         </section>
         {errorMessage && (
-          <strong className="text-red-600">{errorMessage}</strong>
+          <div className="px-6 pb-2">
+            <ErrorMessage message={errorMessage} />
+          </div>
         )}
         <Table
           columns={[

@@ -2,6 +2,7 @@ import { Save } from 'lucide-react';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
 import Input from '../../shared/components/Input';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 
 export function AddSpecialtyForm({
   register,
@@ -15,11 +16,7 @@ export function AddSpecialtyForm({
   return (
     <Card className="p-6 border-med-border rounded-xs">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-        {errorMessage && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-            {errorMessage}
-          </div>
-        )}
+        <ErrorMessage message={errorMessage} />
 
         <div className="flex flex-col gap-1.5">
           <Input
@@ -64,11 +61,7 @@ export function AddSpecialtyForm({
                 : 'border-med-border'
             }`}
           />
-          {errors.description && (
-            <p className="text-xs text-red-500 font-medium">
-              {errors.description.message}
-            </p>
-          )}
+          <ErrorMessage message={errors.description?.message} variant="field" />
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-med-border">

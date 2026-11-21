@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hook/useAuth';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import { frontendErrorMessage } from '../helpers/backendError';
 import {
   ArrowLeft,
@@ -98,11 +99,7 @@ function AdminLoginPage() {
                   })}
                 />
               </div>
-              {errors.username && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.username.message}
-                </p>
-              )}
+              <ErrorMessage message={errors.username?.message} variant="field" />
             </div>
 
             {/* Contraseña */}
@@ -144,11 +141,7 @@ function AdminLoginPage() {
                   )}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.password.message}
-                </p>
-              )}
+              <ErrorMessage message={errors.password?.message} variant="field" />
             </div>
 
             {/* Botón de Submit */}
@@ -168,11 +161,7 @@ function AdminLoginPage() {
             </div>
 
             {/* Error Message */}
-            {errorMessage && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 text-center">
-                {errorMessage}
-              </div>
-            )}
+            <ErrorMessage message={errorMessage} />
           </form>
         </div>
 

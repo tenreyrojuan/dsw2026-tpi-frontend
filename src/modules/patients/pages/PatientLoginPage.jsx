@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../shared/components/Button';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import useAuth from '../../auth/hook/useAuth';
 import { frontendErrorMessage } from '../../auth/helpers/backendError';
 import { parseBackendError } from '../../shared/helpers/parseBackendError';
@@ -98,11 +99,7 @@ function PatientLoginPage() {
                 })}
               />
             </div>
-            {errors.username && (
-              <p className="text-xs text-red-500 font-medium">
-                {errors.username.message}
-              </p>
-            )}
+            <ErrorMessage message={errors.username?.message} variant="field" />
           </div>
 
           {/* DNI */}
@@ -136,11 +133,7 @@ function PatientLoginPage() {
                 })}
               />
             </div>
-            {errors.dni && (
-              <p className="text-xs text-red-500 font-medium">
-                {errors.dni.message}
-              </p>
-            )}
+            <ErrorMessage message={errors.dni?.message} variant="field" />
           </div>
 
           <Button type="submit" className="w-full mt-1">
@@ -152,11 +145,7 @@ function PatientLoginPage() {
             automáticamente.
           </div>
 
-          {errorMessage && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 text-center">
-              {errorMessage}
-            </div>
-          )}
+          <ErrorMessage message={errorMessage} />
         </form>
       </div>
 

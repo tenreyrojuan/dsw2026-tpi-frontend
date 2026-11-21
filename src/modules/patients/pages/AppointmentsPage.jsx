@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
 import Loading from '../../shared/components/Loading';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import { usePatientAppointments } from '../hooks/usePatientAppointments';
 import { Plus } from 'lucide-react';
 
@@ -29,9 +30,7 @@ function AppointmentsPage() {
       </div>
 
       {isLoading && <Loading />}
-      {!isLoading && error && (
-        <p className="text-sm text-red-500 font-medium">{error}</p>
-      )}
+      {!isLoading && <ErrorMessage message={error} />}
       {!isLoading && !error && appointments.length === 0 && (
         <p className="text-sm text-med-text-sub">No tenés turnos programados.</p>
       )}

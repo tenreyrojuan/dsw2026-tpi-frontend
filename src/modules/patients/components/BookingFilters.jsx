@@ -1,4 +1,5 @@
 import Select from '../../shared/components/Select';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 
 function BookingFilters({
   register,
@@ -45,7 +46,7 @@ function BookingFilters({
           error={errors.doctorId?.message}
         />
       </div>
-      {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+      <ErrorMessage message={error} />
     </div>
   );
 }

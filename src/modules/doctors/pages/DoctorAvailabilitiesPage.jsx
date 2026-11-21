@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { Info } from 'lucide-react';
 import Card from '../../shared/components/Card';
 import Select from '../../shared/components/Select';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import AvailabilityForm from '../components/AvailabilityForm';
 import { useDoctors } from '../hooks/useDoctors';
 
 function DoctorAvailabilitiesPage() {
   const [doctorId, setDoctorId] = useState('');
-  const { doctors } = useDoctors({ pageSize: 100 });
+  const { doctors, error } = useDoctors({ pageSize: 100 });
   const doctor = doctors.find((d) => String(d.id) === doctorId);
 
   return (
@@ -24,6 +25,11 @@ function DoctorAvailabilitiesPage() {
       <div className="flex w-full gap-4 items-start">
         <div className="flex flex-col flex-1 gap-4">
           <Card>
+            {error && (
+              <div className="mb-4">
+                <ErrorMessage message={error} />
+              </div>
+            )}
             <Select
               label="Seleccionar Profesional"
               placeholder="Seleccione un profesional"

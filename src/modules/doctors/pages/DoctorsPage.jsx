@@ -2,6 +2,7 @@ import DoctorHeader from '../components/DoctorHeader';
 import { useDoctors } from '../hooks/useDoctors';
 import DoctorsTable from '../components/DoctorsTable';
 import Card from '../../shared/components/Card';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import TableHeader from '../components/TableHeader';
 import { useDelete } from '../hooks/useDelete';
 import TableActions from '../components/TableActions';
@@ -27,8 +28,8 @@ function DoctorsPage() {
         <TableHeader />
 
         {deleteError && (
-          <div className="m-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-            {deleteError}
+          <div className="m-4">
+            <ErrorMessage message={deleteError} />
           </div>
         )}
 

@@ -1,5 +1,6 @@
 import Loading from '../../shared/components/Loading';
 import Table from '../../shared/components/Table';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import TableActions from '../../shared/components/TableActions';
 import { frontendErrorMessage } from '../helpers/backendError';
 import { deleteSpecialty } from '../services/deleteSpecialty';
@@ -55,8 +56,8 @@ export default function SpecialtiesTable({
   return (
     <>
       {deleteError && (
-        <div className="m-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-          {deleteError}
+        <div className="m-4">
+          <ErrorMessage message={deleteError} />
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Loading from '../../shared/components/Loading';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import { useBookAppointment } from '../hooks/useBookAppointment';
 import { useBookingOptions } from '../hooks/useBookingOptions';
 import { useWeekSlots } from '../hooks/useWeekSlots';
@@ -74,9 +75,9 @@ function PatientHome() {
                 {week.isLoading ? (
                   <Loading />
                 ) : week.error ? (
-                  <p className="pt-5 text-xs text-red-500 font-medium">
-                    {week.error}
-                  </p>
+                  <div className="pt-5">
+                    <ErrorMessage message={week.error} />
+                  </div>
                 ) : (
                   <>
                     <WeekGrid {...slotsProps} />

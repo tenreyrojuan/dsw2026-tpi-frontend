@@ -1,5 +1,6 @@
 import Input from '../../shared/components/Input';
 import Select from '../../shared/components/Select';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import Buttons from './AddDoctorFormButtons';
 
 export function AddDoctorForm({
@@ -13,7 +14,7 @@ export function AddDoctorForm({
   } ) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6">
-      {errorMessage && <strong>{errorMessage}</strong>}
+      <ErrorMessage message={errorMessage} />
       <fieldset
         disabled={isSubmitting}
         className="flex flex-col gap-4 border-b border-gray-300 pb-6"

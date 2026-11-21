@@ -1,6 +1,7 @@
 import { Calendar1, CircleCheck } from 'lucide-react';
 import Button from '../../shared/components/Button';
 import Input from '../../shared/components/Input';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import { formatLongDate } from '../helpers/weekDates';
 
 function BookingSummary({
@@ -63,16 +64,8 @@ function BookingSummary({
         error={errors.reason?.message}
       />
 
-      {errors.slotId && (
-        <p className="text-xs text-red-500 font-medium">
-          {errors.slotId.message}
-        </p>
-      )}
-      {errorMessage && (
-        <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-          {errorMessage}
-        </div>
-      )}
+      <ErrorMessage message={errors.slotId?.message} variant="field" />
+      <ErrorMessage message={errorMessage} />
     </div>
   );
 }
