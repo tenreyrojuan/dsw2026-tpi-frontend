@@ -1,11 +1,7 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Button from '../../shared/components/Button';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import useAuth from '../../auth/hook/useAuth';
-import { frontendErrorMessage } from '../../auth/helpers/backendError';
-import { parseBackendError } from '../../shared/helpers/parseBackendError';
+import { usePatientLogin } from '../hooks/usePatientLogin';
 import {
   ArrowRight,
   IdCard,
@@ -14,40 +10,8 @@ import {
 } from 'lucide-react';
 
 function PatientLoginPage() {
-  const [errorMessage, setErrorMessage] = useState('');
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ defaultValues: { username: '', dni: '' } });
-
-  const navigate = useNavigate();
-  const { singinPatient } = useAuth();
-
-  const onValid = async (formData) => {
-    try {
-      const { error } = await singinPatient(
-        formData.username,
-        formData.dni
-      );
-
-      if (error) {
-        setErrorMessage(error.frontendErrorMessage || 'Credenciales inválidas');
-
-        return;
-      }
-
-      navigate('/');
-    } catch (error) {
-      setErrorMessage(
-        parseBackendError(
-          error,
-          frontendErrorMessage,
-          'Error al conectar con el servicio de pacientes'
-        )
-      );
-    }
-  };
+  const { register, handleSubmit, errors, onSubmit, errorMessage } =
+    usePatientLogin();
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-med-primary-950 px-4 py-8 sm:p-6">
@@ -72,7 +36,7 @@ function PatientLoginPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           {/* Correo Electrónico */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-med-text-main">

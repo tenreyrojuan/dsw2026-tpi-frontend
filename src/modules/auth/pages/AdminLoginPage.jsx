@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-import useAuth from '../hook/useAuth';
+import { Link } from 'react-router-dom';
+import { useAdminLogin } from '../hooks/useAdminLogin';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import { frontendErrorMessage } from '../helpers/backendError';
 import {
   ArrowLeft,
   ArrowRight,
@@ -15,39 +13,10 @@ import {
 } from 'lucide-react';
 
 function AdminLoginPage() {
-  const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ defaultValues: { username: '', password: '' } });
-
-  const navigate = useNavigate();
-  const { singinAdmin } = useAuth();
-
-  const onValid = async (formData) => {
-    try {
-      const { error } = await singinAdmin(formData.username, formData.password);
-
-      if (error) {
-        setErrorMessage(
-          error.frontendErrorMessage || 'Credenciales administrativas inválidas'
-        );
-
-        return;
-      }
-
-      navigate('/admin/home');
-    } catch (error) {
-      if (error?.response?.data?.ErrorCode) {
-        setErrorMessage(frontendErrorMessage[error?.response?.data?.ErrorCode]);
-      } else {
-        setErrorMessage('Error al conectar con el servicio administrativo');
-      }
-    }
-  };
+  const { register, handleSubmit, errors, onSubmit, errorMessage } =
+    useAdminLogin();
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-med-primary-950 px-4 py-8">
@@ -74,7 +43,7 @@ function AdminLoginPage() {
           </div>
 
           <form
-            onSubmit={handleSubmit(onValid)}
+            onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
             {/* Correo Electrónico */}
