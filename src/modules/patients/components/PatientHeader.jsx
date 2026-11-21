@@ -9,7 +9,7 @@ export default function PatientHeader(){
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
-    const { singout } = useAuth();
+    const { singout, username, role } = useAuth();
     const handleLogout = () => {
     singout();
     navigate('/login');
@@ -22,11 +22,11 @@ export default function PatientHeader(){
         <header className="bg-white shadow-xs border-b border-med-border sticky top-0 z-30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
                 <PatientLogoLinks />
-                <Actions onClick={handleOnClick} handleLogout={singout}/>
+                <Actions onClick={handleOnClick} handleLogout={singout} username={username} role={role}/>
             </div>
 
             {mobileMenuOpen && (
-                <BurgerMenu handleOnClick={handleOnClose} handleLogout={handleLogout}/> 
+                <BurgerMenu handleOnClick={handleOnClose} handleLogout={handleLogout} username={username} role={role}/>
             )}
 
         </header>

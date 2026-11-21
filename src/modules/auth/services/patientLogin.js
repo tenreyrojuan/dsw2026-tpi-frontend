@@ -15,5 +15,5 @@ export const loginPatient = async (username, password) => {
     password,
   });
 
-  return { data: response.data.token, error: null };
+  return { data: response.data.token, role: response.data.role, error: null };
 };

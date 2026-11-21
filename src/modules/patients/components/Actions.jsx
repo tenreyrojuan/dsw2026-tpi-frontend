@@ -1,7 +1,7 @@
 import { Menu } from "lucide-react";
 
 {/* Acciones Derecha Desktop / Mobile Avatar */}
-export default function Actions({onClick, handleLogout}){
+export default function Actions({onClick, handleLogout, username, role}){
 
     return(
         <div className="flex items-center gap-2 sm:gap-4">
@@ -11,10 +11,10 @@ export default function Actions({onClick, handleLogout}){
             {/* Avatar Paciente */}
             <div className="flex items-center gap-2.5 pl-2 sm:border-l sm:border-med-border">
             <div className="w-8 h-8 rounded-full bg-med-primary-100 text-med-primary-900 font-bold text-xs flex items-center justify-center border border-med-primary-200">
-                JD
+                {username?.slice(0, 2).toUpperCase()}
             </div>
             <span className="hidden sm:inline-block text-xs font-semibold text-med-text-main">
-                Johnathan Doe
+                {username} · {role}
             </span>
             </div>
 

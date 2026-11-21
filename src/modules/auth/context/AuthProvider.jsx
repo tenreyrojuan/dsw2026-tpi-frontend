@@ -12,13 +12,24 @@ function AuthProvider({ children }) {
     return Boolean(token);
   });
 
+  const [username, setUsername] = useState(() =>
+    localStorage.getItem('username')
+  );
+  const [role, setRole] = useState(() => localStorage.getItem('role'));
+
   const singout = () => {
     localStorage.clear();
     setIsAuthenticated(false);
+    setUsername(null);
+    setRole(null);
   };
 
-  const setAuthSession = (token) => {
+  const setAuthSession = (token, username = '', role = '') => {
     localStorage.setItem('token', token);
+    localStorage.setItem('username', username);
+    localStorage.setItem('role', role);
+    setUsername(username);
+    setRole(role);
     setIsAuthenticated(true);
   };
 
@@ -29,20 +40,20 @@ function AuthProvider({ children }) {
       return { error };
     }
 
-    setAuthSession(data);
+    setAuthSession(data, username);
 
     return { error: null };
   };
 
   const singinAdmin = async (username, password) => {
 
-    const { data, error } = await loginAdmin(username, password);
+    const { data, role, error } = await loginAdmin(username, password);
 
     if (error) {
       return { error };
     }
 
-    setAuthSession(data);
+    setAuthSession(data, username, role);
 
     return { error: null };
   };
@@ -54,18 +65,18 @@ function AuthProvider({ children }) {
         username === 'paciente@test.com') &&
       password === 'paciente123'
     ) {
-      setAuthSession('mock-patient-token-67890');
+      setAuthSession('mock-patient-token-67890', username, 'PACIENTE');
 
       return { error: null };
     }
 
-    const { data, error } = await loginPatient(username, password);
+    const { data, role, error } = await loginPatient(username, password);
 
     if (error) {
       return { error };
     }
 
-    setAuthSession(data);
+    setAuthSession(data, username, role);
 
     return { error: null };
   };
@@ -74,6 +85,8 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        username,
+        role,
         singin,
         singinAdmin,
         singinPatient,

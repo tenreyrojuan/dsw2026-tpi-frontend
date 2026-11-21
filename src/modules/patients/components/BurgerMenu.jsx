@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
 
 {/* Desplegable móvil */}
-export default function BurgerMenu({ handleOnClick, handleLogout }) {
+export default function BurgerMenu({ handleOnClick, handleLogout, username, role }) {
 
-    const datos = localStorage.getItem('datos');
     return(
         <div className="md:hidden border-t border-med-border px-4 py-3 bg-white space-y-2">
             <NavLink
@@ -36,7 +35,7 @@ export default function BurgerMenu({ handleOnClick, handleLogout }) {
             <div className="pt-2 border-t border-med-border-subtle flex items-center justify-between">
             <span className="text-xs font-medium text-med-text-sub"
             >
-                Paciente: {datos.name}
+                {username} · {role}
             </span>
             <button
             onClick={handleLogout}
