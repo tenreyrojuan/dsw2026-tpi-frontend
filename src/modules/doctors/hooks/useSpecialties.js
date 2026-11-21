@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchSpecialties } from '../services/fetchSpecialties';
+import { fetchSpecialties } from '../../specialties/services/fetchSpecialties';
 import { frontendErrorMessage } from '../helpers/backendError';
 import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
@@ -13,11 +13,14 @@ export function useSpecialties() {
         setIsLoading(true);
 
         try {
-          const { data } = await fetchSpecialties();
+          const { data } = await fetchSpecialties({
+            pageSize: 100,
+            pageIndex: 0,
+          });
 
-            setSpecialties(data);
+            setSpecialties(data.data);
 
-          if (data.length === 0) {
+          if (data.data.length === 0) {
             setError('No se encontraron especialidades');
           }
         } catch (error) {
