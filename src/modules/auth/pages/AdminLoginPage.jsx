@@ -220,8 +220,8 @@ function AdminLoginPage() {
             <div className="bg-med-primary-50 border border-med-primary-200/60 rounded-lg p-2.5 text-center text-xs text-med-primary-900">
               <span className="font-semibold">Credenciales de prueba:</span>
               <br />
-              Email: <code>admin@medportal.com</code> | Clave:{' '}
-              <code>admin123</code>
+              Email: <code>admin1@medportal.com</code> | Clave:{' '}
+              <code>Admin!123</code>
             </div>
 
             {/* Error Message */}
