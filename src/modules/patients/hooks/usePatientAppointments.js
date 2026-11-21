@@ -3,6 +3,7 @@ import { fetchPatientAppointments } from '../services/fetchPatientAppointments';
 import { cancelAppointment } from '../services/cancelAppointment';
 import { getPatientDni } from '../../auth/helpers/patientSession';
 import { frontendErrorMessage } from '../helpers/backendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function usePatientAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -18,16 +19,13 @@ export function usePatientAppointments() {
 
       setAppointments(data);
     } catch (error) {
-      const issue = error?.response?.data?.Details?.[0]?.Issue;
-      const errorCode = error?.response?.data?.ErrorCode;
-
-      if (issue) {
-        setError(issue);
-      } else if (errorCode && frontendErrorMessage[errorCode]) {
-        setError(frontendErrorMessage[errorCode]);
-      } else {
-        setError('Error al conectar con el servicio de pacientes');
-      }
+      setError(
+        parseBackendError(
+          error,
+          frontendErrorMessage,
+          'Error al conectar con el servicio de pacientes'
+        )
+      );
     } finally {
       setIsLoading(false);
     }
@@ -44,16 +42,13 @@ export function usePatientAppointments() {
       await cancelAppointment({ id });
       await load();
     } catch (error) {
-      const issue = error?.response?.data?.Details?.[0]?.Issue;
-      const errorCode = error?.response?.data?.ErrorCode;
-
-      if (issue) {
-        setError(issue);
-      } else if (errorCode && frontendErrorMessage[errorCode]) {
-        setError(frontendErrorMessage[errorCode]);
-      } else {
-        setError('Error al conectar con el servicio de pacientes');
-      }
+      setError(
+        parseBackendError(
+          error,
+          frontendErrorMessage,
+          'Error al conectar con el servicio de pacientes'
+        )
+      );
     }
   };
 
