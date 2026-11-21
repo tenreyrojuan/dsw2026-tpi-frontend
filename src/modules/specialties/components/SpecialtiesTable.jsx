@@ -2,9 +2,6 @@ import Loading from '../../shared/components/Loading';
 import Table from '../../shared/components/Table';
 import ErrorMessage from '../../shared/components/ErrorMessage';
 import TableActions from '../../shared/components/TableActions';
-import { frontendErrorMessage } from '../helpers/backendError';
-import { deleteSpecialty } from '../services/deleteSpecialty';
-import { useDelete } from '../hooks/useDelete';
 
 const columns = [
   { key: 'name', label: 'Nombre de la Especialidad', className: 'w-1/4' },
@@ -18,27 +15,9 @@ export default function SpecialtiesTable({
   error,
   pagination,
   totalItems,
-  onDeleted,
+  onDelete,
+  deleteError,
 }) {
-  const { remove: removeSpecialty, isDeleting, deleteError } = useDelete({
-    deleteFn: deleteSpecialty,
-    errorMessages: frontendErrorMessage,
-  });
-
-  const handleDelete = async (spec) => {
-    if (isDeleting) return;
-
-    const confirmed = window.confirm(
-      `¿Seguro que querés eliminar la especialidad "${spec.name}"?`
-    );
-
-    if (confirmed) {
-      const ok = await removeSpecialty(spec.id);
-
-      if (ok && onDeleted) onDeleted();
-    }
-  };
-
   const tableData = filteredSpecialties.map((spec) => ({
     ...spec,
     actions: (
@@ -46,7 +25,7 @@ export default function SpecialtiesTable({
         editTitle={`Editar ${spec.name}`}
         deleteTitle={`Eliminar ${spec.name}`}
         onEdit={() => alert(`Editar especialidad ${spec.name}`)}
-        onDelete={() => handleDelete(spec)}
+        onDelete={() => onDelete(spec)}
       />
     ),
   }));

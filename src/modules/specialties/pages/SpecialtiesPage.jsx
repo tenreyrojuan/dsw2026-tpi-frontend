@@ -2,6 +2,9 @@ import Card from '../../shared/components/Card';
 import SpecialtyHeader from '../components/SpecialtyHeader';
 import SpecialtiesTable from '../components/SpecialtiesTable';
 import { useSpecialties } from '../hooks/useSpecialties';
+import { useDelete } from '../hooks/useDelete';
+import { deleteSpecialty } from '../services/deleteSpecialty';
+import { frontendErrorMessage } from '../helpers/backendError';
 
 function SpecialtiesPage() {
   const {
@@ -14,6 +17,21 @@ function SpecialtiesPage() {
     totalSpecialties,
     pagination,
   } = useSpecialties();
+
+  const { remove: removeSpecialty, isDeleting, deleteError } = useDelete({
+    deleteFn: deleteSpecialty,
+    errorMessages: frontendErrorMessage,
+  });
+
+  const handleDelete = async (spec) => {
+    if (isDeleting) return;
+
+    const confirmed = window.confirm(
+      `¿Seguro que querés eliminar la especialidad "${spec.name}"?`
+    );
+
+    if (confirmed && (await removeSpecialty(spec.id))) reloadSpecialties();
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,7 +50,8 @@ function SpecialtiesPage() {
           error={error}
           pagination={pagination}
           totalItems={totalSpecialties}
-          onDeleted={reloadSpecialties}
+          onDelete={handleDelete}
+          deleteError={deleteError}
         />
       </Card>
     </div>
