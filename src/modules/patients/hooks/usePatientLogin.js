@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../auth/hook/useAuth';
 import { frontendErrorMessage } from '../../auth/helpers/backendError';
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function usePatientLogin() {
   const {
@@ -20,16 +21,13 @@ export function usePatientLogin() {
       await singinPatient(data.username, data.dni);
       navigate('/');
     } catch (error) {
-      const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
-      const errorCode = error?.response?.data?.ErrorCode;
-
-      if (issueMessage) {
-        setErrorMessage(issueMessage);
-      } else if (errorCode && frontendErrorMessage[errorCode]) {
-        setErrorMessage(frontendErrorMessage[errorCode]);
-      } else {
-        setErrorMessage('Error al conectar con el servicio de pacientes');
-      }
+      setErrorMessage(
+        parseBackendError(
+          error,
+          frontendErrorMessage,
+          'Error al conectar con el servicio de pacientes'
+        )
+      );
     }
   };
 
