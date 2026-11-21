@@ -3,6 +3,7 @@ import { fetchDoctors } from '../services/fetchDoctors';
 import { useCallback, useEffect } from 'react';
 import { usePaginate } from '../../shared/hooks/usePaginate';
 import { frontendErrorMessage } from '../helpers/backendError'
+import { parseBackendError } from '../../shared/helpers/parseBackendError';
 
 export function useDoctors({ pageSize = 10 } = {}) {
   const [doctors, setDoctors] = useState([]);
@@ -44,16 +45,7 @@ export function useDoctors({ pageSize = 10 } = {}) {
       setTotalDoctors(total);
     }
     catch (error) {
-      const issueMessage = error?.response?.data?.Details?.[0]?.Issue;
-      const errorCode = error?.response?.data?.ErrorCode;
-
-      if (issueMessage) {
-        setError(issueMessage);
-      } else if (errorCode && frontendErrorMessage[errorCode]) {
-        setError(frontendErrorMessage[errorCode]);
-      } else {
-        setError('Error al conectar con el servicio administrativo');
-      }
+      setError(parseBackendError(error, frontendErrorMessage));
     }
     finally {
       setIsLoading(false);
