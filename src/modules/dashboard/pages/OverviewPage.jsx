@@ -1,23 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/Card';
 import Button from '../../shared/components/Button';
-import { useDoctorsCount } from '../hooks/useDoctorsCount';
-import { useSpecialtiesCount } from '../hooks/useSpecialtiesCount';
-import { useBookedSlotsCount } from '../hooks/useBookedSlotsCount';
-import Table from '../../shared/components/Table';
-import Loading from '../../shared/components/Loading';
-import { useDoctorsDirectory } from '../hooks/useDoctorsDirectory';
+import { useStats } from '../hooks/useStats';
+import { useDoctors } from '../../doctors/hooks/useDoctors';
+import DoctorsTable from '../../doctors/components/DoctorsTable';
 import { Stethoscope, LayoutGrid, CalendarCheck, Search } from 'lucide-react';
 
 function OverviewPage() {
   const navigate = useNavigate();
 
-  const doctors = useDoctorsCount();
-  const specialties = useSpecialtiesCount();
-  const bookedSlots = useBookedSlotsCount();
+  const { stats, isLoading: isLoadingStats, error: statsError } = useStats();
 
-  const { filteredDoctors, searchTerm, setSearchTerm, isLoading, error, pagination, totalDoctors } =
-    useDoctorsDirectory();
+  const {
+    doctors,
+    onSearchTermChange,
+    isLoading,
+    error,
+    pagination,
+    totalDoctors,
+  } = useDoctors({ pageSize: 5 });
 
   return (
     <div className="flex flex-col gap-8">
@@ -58,11 +59,8 @@ function OverviewPage() {
         <Card className="flex flex-col justify-between p-6">
           <div className="flex items-start justify-between">
             <div className="w-11 h-11 rounded-xl bg-med-primary-50 text-med-primary-900 flex items-center justify-center">
-             <Stethoscope className="w-6 h-6" />
+              <Stethoscope className="w-6 h-6" />
             </div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-med-active-bg text-med-active-text">
-              +4 este mes
-            </span>
           </div>
 
           <div className="mt-6">
@@ -70,7 +68,7 @@ function OverviewPage() {
               Doctores Activos
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {doctors.isLoading ? '...' : doctors.error ? '-' : doctors.count}
+              {isLoadingStats ? '...' : statsError ? '-' : stats.activeDoctors}
             </p>
           </div>
         </Card>
@@ -81,9 +79,6 @@ function OverviewPage() {
             <div className="w-11 h-11 rounded-xl bg-med-primary-50 text-med-primary-900 flex items-center justify-center">
               <LayoutGrid className="w-6 h-6" />
             </div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
-              Estable
-            </span>
           </div>
 
           <div className="mt-6">
@@ -91,11 +86,11 @@ function OverviewPage() {
               Especialidades Activas
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {specialties.isLoading
+              {isLoadingStats
                 ? '...'
-                : specialties.error
+                : statsError
                   ? '-'
-                  : specialties.count}
+                  : stats.activeSpecialties}
             </p>
           </div>
         </Card>
@@ -106,9 +101,6 @@ function OverviewPage() {
             <div className="w-11 h-11 rounded-xl bg-med-primary-50 text-med-primary-900 flex items-center justify-center">
               <CalendarCheck className="w-6 h-6" />
             </div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-med-primary-100 text-med-primary-700">
-              Hoy
-            </span>
           </div>
 
           <div className="mt-6">
@@ -116,11 +108,11 @@ function OverviewPage() {
               Turnos Confirmados Para Hoy
             </span>
             <p className="text-3xl sm:text-4xl font-extrabold text-med-primary-900 mt-1">
-              {bookedSlots.isLoading
+              {isLoadingStats
                 ? '...'
-                : bookedSlots.error
+                : statsError
                   ? '-'
-                  : bookedSlots.count}
+                  : stats.bookedAppointmentsToday}
             </p>
           </div>
         </Card>
@@ -141,56 +133,28 @@ function OverviewPage() {
               type="text"
               placeholder="Buscar por nombre..."
               className="w-full pl-9 pr-3 py-1.5 text-xs bg-med-primary-50/70 border border-med-border rounded-lg text-med-text-main placeholder-med-text-muted focus:outline-none focus:ring-1 focus:ring-med-primary-600"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={onSearchTermChange}
             />
           </div>
         </div>
 
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <Table
-            pageSize={10}
-            error={error}
-            data={filteredDoctors}
-            columns={[
-              {
-                key: 'name',
-                label: 'Nombre del Doctor',
-                render: (d) => (
-                  <>
-                    <span className="w-9 h-9 rounded-full bg-med-primary-100 flex items-center justify-center text-sm font-semibold text-med-primary-700">
-                      {d.name.charAt(0)}
-                    </span>
-                    <span className="font-semibold text-med-primary-900">
-                      {d.name}
-                    </span>
-                  </>
-                ),
-              },
-              {
-                key: 'specialty',
-                label: 'Especialidad',
-                render: (d) => d.specialty?.name,
-              },
-              {
-                key: 'actions',
-                label: 'Acciones',
-                render: () => (
-                  <button
-                    type="button"
-                    className="text-xs font-semibold text-med-primary-700 hover:text-med-primary-900"
-                    onClick={() => navigate('/admin/doctors')}
-                  >
-                    Ver Detalle
-                  </button>
-                ),
-              },
-            ]}
-            pagination={pagination}
-          />
-        )}
+        <DoctorsTable
+          doctors={doctors}
+          isLoading={isLoading}
+          error={error}
+          pagination={pagination}
+          totalItems={totalDoctors}
+          showId={false}
+          renderActions={() => (
+            <button
+              type="button"
+              className="ml-auto text-xs font-semibold text-med-primary-700 hover:text-med-primary-900"
+              onClick={() => navigate('/admin/doctors')}
+            >
+              Ver Detalle
+            </button>
+          )}
+        />
       </Card>
     </div>
   );
