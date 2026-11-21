@@ -4,7 +4,13 @@ import Button from '../../shared/components/Button';
 import { useStats } from '../hooks/useStats';
 import { useDoctors } from '../../doctors/hooks/useDoctors';
 import DoctorsTable from '../../doctors/components/DoctorsTable';
-import { Stethoscope, LayoutGrid, CalendarCheck, Search } from 'lucide-react';
+import {
+  Stethoscope,
+  LayoutGrid,
+  CalendarCheck,
+  Plus,
+  Search,
+} from 'lucide-react';
 
 function OverviewPage() {
   const navigate = useNavigate();
@@ -38,7 +44,7 @@ function OverviewPage() {
             onClick={() => navigate('/admin/doctors')}
             className="flex items-center gap-2"
           >
-            <span>+</span>
+            <Plus className="w-4 h-4" />
             <span>Agregar Nuevo Doctor</span>
           </Button>
 
@@ -47,7 +53,7 @@ function OverviewPage() {
             onClick={() => navigate('/admin/specialties')}
             className="flex items-center gap-2"
           >
-            <span>+</span>
+            <Plus className="w-4 h-4" />
             <span>Agregar Nueva Especialidad</span>
           </Button>
         </div>

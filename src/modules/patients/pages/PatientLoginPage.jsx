@@ -6,6 +6,7 @@ import useAuth from '../../auth/hook/useAuth';
 import { frontendErrorMessage } from '../../auth/helpers/backendError';
 import { parseBackendError } from '../../shared/helpers/parseBackendError';
 import {
+  ArrowRight,
   IdCard,
   Mail,
   ShieldCheck
@@ -163,9 +164,10 @@ function PatientLoginPage() {
       <div className="mt-6 text-center">
         <Link
           to="/admin/login"
-          className="text-xs text-med-primary-200 hover:text-white transition"
+          className="inline-flex items-center gap-1 text-xs text-med-primary-200 hover:text-white transition"
         >
-          ¿Es personal administrativo o médico? Ingrese aquí →
+          ¿Es personal administrativo o médico? Ingrese aquí
+          <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
     </div>
